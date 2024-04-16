@@ -1,6 +1,6 @@
 {
-  "name": "mdast-util-to-markdown",
-  "version": "2.1.0",
+  "name": "mdast-util-to-telegram",
+  "version": "1.0.0",
   "description": "mdast utility to serialize markdown",
   "license": "MIT",
   "keywords": [
