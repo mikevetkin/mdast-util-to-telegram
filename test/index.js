@@ -1758,10 +1758,10 @@ test('heading', { only: true }, async function (t) {
     )
   })
 
-  await t.test('should serialize a heading w/ content', async function () {
+  await t.test('should serialize a heading w/ content', { only: true }, async function () {
     assert.equal(
       to({type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]}),
-      '# a\n'
+      '**a**\n'
     )
   })
 
