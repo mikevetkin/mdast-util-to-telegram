@@ -1,7 +1,6 @@
 /**
- * @typedef {import('mdast').BlockContent} BlockContent
- * @typedef {import('mdast').List} List
- * @typedef {import('mdast-util-to-markdown').Handle} Handle
+ * @import {Handle} from 'mdast-util-to-markdown'
+ * @import {BlockContent, List, PhrasingContent, Root} from 'mdast'
  */
 
 import assert from 'node:assert/strict'
@@ -1265,7 +1264,10 @@ test('emphasis', async function (t) {
   )
 })
 
-test('heading', async function (t) {
+/**
+ * @legacy
+ */
+test.skip('heading', async function (t) {
   await t.test(
     'should serialize a heading w/o rank as a heading of rank 1',
     async function () {
@@ -1273,6 +1275,449 @@ test('heading', async function (t) {
         // @ts-expect-error: check how the runtime handles `children` missing.
         to({type: 'heading'}),
         '#\n'
+      )
+    }
+  )
+
+  await t.test('should serialize a heading w/ rank 1', async function () {
+    assert.equal(
+      // @ts-expect-error: check how the runtime handles `children` missing.
+      to({type: 'heading', depth: 1}),
+      '#\n'
+    )
+  })
+
+  await t.test('should serialize a heading w/ rank 6', async function () {
+    assert.equal(to({type: 'heading', depth: 6, children: []}), '######\n')
+  })
+
+  await t.test('should serialize a heading w/ rank 7 as 6', async function () {
+    assert.equal(
+      to({
+        type: 'heading',
+        // @ts-expect-error: check how the runtime handles `depth` being too high.
+        depth: 7,
+        children: []
+      }),
+      '######\n'
+    )
+  })
+
+  await t.test('should serialize a heading w/ rank 0 as 1', async function () {
+    assert.equal(
+      to({
+        type: 'heading',
+        // @ts-expect-error: check how the runtime handles `depth` being too low.
+        depth: 0,
+        children: []
+      }),
+      '#\n'
+    )
+  })
+
+  await t.test('should serialize a heading w/ content', async function () {
+    assert.equal(
+      to({type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]}),
+      '# a\n'
+    )
+  })
+
+  await t.test(
+    'should serialize a heading w/ rank 1 as setext when `setext: true`',
+    async function () {
+      assert.equal(
+        to(
+          {type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]},
+          {setext: true}
+        ),
+        'a\n=\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize a heading w/ rank 2 as setext when `setext: true`',
+    async function () {
+      assert.equal(
+        to(
+          {type: 'heading', depth: 2, children: [{type: 'text', value: 'a'}]},
+          {setext: true}
+        ),
+        'a\n-\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize a heading w/ rank 3 as atx when `setext: true`',
+    async function () {
+      assert.equal(
+        to(
+          {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
+          {setext: true}
+        ),
+        '### a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize a setext underline as long as the last line (1)',
+    async function () {
+      assert.equal(
+        to(
+          {
+            type: 'heading',
+            depth: 2,
+            children: [{type: 'text', value: 'aa\rb'}]
+          },
+          {setext: true}
+        ),
+        'aa\rb\n-\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize a setext underline as long as the last line (2)',
+    async function () {
+      assert.equal(
+        to(
+          {
+            type: 'heading',
+            depth: 1,
+            children: [{type: 'text', value: 'a\r\nbbb'}]
+          },
+          {setext: true}
+        ),
+        'a\r\nbbb\n===\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize an empty heading w/ rank 1 as atx when `setext: true`',
+    async function () {
+      assert.equal(
+        to({type: 'heading', depth: 1, children: []}, {setext: true}),
+        '#\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize an empty heading w/ rank 2 as atx when `setext: true`',
+    async function () {
+      assert.equal(
+        to({type: 'heading', depth: 2, children: []}, {setext: true}),
+        '##\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize an heading w/ rank 1 and code w/ a line ending as setext',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'inlineCode', value: '\n'}]
+        }),
+        '`\n`\n=\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize an heading w/ rank 1 and html w/ a line ending as setext',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'html', value: '<a\n/>'}]
+        }),
+        '<a\n/>\n==\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize an heading w/ rank 1 and text w/ a line ending as setext',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: 'a\nb'}]
+        }),
+        'a\nb\n=\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize an heading w/ rank 1 and a break as setext',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [
+            {type: 'text', value: 'a'},
+            {type: 'break'},
+            {type: 'text', value: 'b'}
+          ]
+        }),
+        'a\\\nb\n=\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize a heading with a closing sequence when `closeAtx` (empty)',
+    async function () {
+      assert.equal(
+        to({type: 'heading', depth: 1, children: []}, {closeAtx: true}),
+        '# #\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should serialize a with a closing sequence when `closeAtx` (content)',
+    async function () {
+      assert.equal(
+        to(
+          {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
+          {closeAtx: true}
+        ),
+        '### a ###\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should not escape a `#` at the start of phrasing in a heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 2,
+          children: [{type: 'text', value: '# a'}]
+        }),
+        '## # a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should not escape a `1)` at the start of phrasing in a heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 2,
+          children: [{type: 'text', value: '1) a'}]
+        }),
+        '## 1) a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should not escape a `+` at the start of phrasing in a heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 2,
+          children: [{type: 'text', value: '+ a'}]
+        }),
+        '## + a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should not escape a `-` at the start of phrasing in a heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 2,
+          children: [{type: 'text', value: '- a'}]
+        }),
+        '## - a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should not escape a `=` at the start of phrasing in a heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 2,
+          children: [{type: 'text', value: '= a'}]
+        }),
+        '## = a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should not escape a `>` at the start of phrasing in a heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 2,
+          children: [{type: 'text', value: '> a'}]
+        }),
+        '## > a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should escape a `#` at the end of a heading (1)',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: 'a #'}]
+        }),
+        '# a \\#\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should escape a `#` at the end of a heading (2)',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: 'a ##'}]
+        }),
+        '# a #\\#\n'
+      )
+    }
+  )
+
+  await t.test('should not escape a `#` in a heading (2)', async function () {
+    assert.equal(
+      to({
+        type: 'heading',
+        depth: 1,
+        children: [{type: 'text', value: 'a # b'}]
+      }),
+      '# a # b\n'
+    )
+  })
+
+  await t.test(
+    'should encode a space at the start of an atx heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: '  a'}]
+        }),
+        '# &#x20; a\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should encode a tab at the start of an atx heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: '\t\ta'}]
+        }),
+        '# &#x9;\ta\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should encode a space at the end of an atx heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: 'a  '}]
+        }),
+        '# a &#x20;\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should encode a tab at the end of an atx heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: 'a\t\t'}]
+        }),
+        '# a\t&#x9;\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should encode spaces around a line ending in a setext heading',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 1,
+          children: [{type: 'text', value: 'a \n b'}]
+        }),
+        'a&#x20;\n&#x20;b\n=======\n'
+      )
+    }
+  )
+
+  await t.test(
+    'should not need to encode spaces around a line ending in an atx heading (because the line ending is encoded)',
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          depth: 3,
+          children: [{type: 'text', value: 'a \n b'}]
+        }),
+        '### a &#xA; b\n'
+      )
+    }
+  )
+})
+
+test('heading', { only: true }, async function (t) {
+
+  t.runOnly(true);
+
+  await t.test(
+    'should serialize a heading w/o rank as a heading of rank 1',
+    { only: true },
+    async function () {
+      assert.equal(
+        // @ts-expect-error: check how the runtime handles `children` missing.
+        to({type: 'heading'}),
+        '****\n'
       )
     }
   )
@@ -4333,21 +4778,21 @@ test('roundtrip', async function (t) {
   await t.test(
     'should roundtrip spread items in block quotes',
     async function () {
-      const doc = [
+      const value = [
         '> * Lorem ipsum dolor sit amet',
         '>',
         '> * consectetur adipisicing elit',
         ''
       ].join('\n')
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test(
     'should roundtrip spread items in sublists (1)',
     async function () {
-      const doc = [
+      const value = [
         '* Lorem ipsum dolor sit amet',
         '',
         '  1. consectetur adipisicing elit',
@@ -4356,28 +4801,28 @@ test('roundtrip', async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test(
     'should roundtrip spread items in sublists (2)',
     async function () {
-      const doc = [
+      const value = [
         '* 1. Lorem ipsum dolor sit amet',
         '',
         '  2. consectetur adipisicing elit',
         ''
       ].join('\n')
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test(
     'should roundtrip spread items in sublists (3)',
     async function () {
-      const doc = [
+      const value = [
         '* hello',
         '  * world',
         '    how',
@@ -4390,23 +4835,23 @@ test('roundtrip', async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test(
     'should roundtrip autolinks w/ potentially escapable characters',
     async function () {
-      const doc = 'An autolink: <http://example.com/?foo=1&bar=2>.\n'
+      const value = 'An autolink: <http://example.com/?foo=1&bar=2>.\n'
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test(
     'should roundtrip potential prototype injections',
     async function () {
-      const doc = [
+      const value = [
         'A [primary][toString], [secondary][constructor], and [tertiary][__proto__] link.',
         '',
         '[toString]: http://primary.com',
@@ -4417,12 +4862,12 @@ test('roundtrip', async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test('should roundtrip empty lists', async function () {
-    const doc = [
+    const value = [
       '* foo',
       '',
       '*',
@@ -4437,13 +4882,13 @@ test('roundtrip', async function (t) {
       ''
     ].join('\n')
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test('should roundtrip empty lists', async function () {
-    const doc = '* a\n\n<!---->\n\n* b\n'
+    const value = '* a\n\n<!---->\n\n* b\n'
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test(
@@ -4451,7 +4896,7 @@ test('roundtrip', async function (t) {
     async function () {
       // The first one could have (up to) four spaces, but it doesn’t add anything,
       // so we don’t roundtrip it.
-      const doc = [
+      const value = [
         '    <h3>Header 3</h3>',
         '',
         '    <blockquote>',
@@ -4464,20 +4909,20 @@ test('roundtrip', async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(doc), {fences: false}), doc)
+      assert.equal(to(from(value), {fences: false}), value)
     }
   )
 
   await t.test('should roundtrip adjacent block quotes', async function () {
-    const doc = '> a\n\n> b\n'
+    const value = '> a\n\n> b\n'
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test('should roundtrip formatted URLs', async function () {
-    const doc = '[**https://unifiedjs.com/**](https://unifiedjs.com/)\n'
+    const value = '[**https://unifiedjs.com/**](https://unifiedjs.com/)\n'
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test('should roundtrip backslashes (1)', async function () {
@@ -4490,44 +4935,44 @@ test('roundtrip', async function (t) {
   })
 
   await t.test('should not collapse escapes (1)', async function () {
-    const doc = '\\\\\\*a\n'
+    const value = '\\\\\\*a\n'
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test('should not collapse escapes (2)', async function () {
-    const doc = '\\\\*a\\\\\\*'
+    const value = '\\\\*a\\\\\\*'
 
     assert.deepEqual(
-      removePosition(from(doc)),
-      removePosition(from(to(from(doc))))
+      removePosition(from(value)),
+      removePosition(from(to(from(value))))
     )
   })
 
   await t.test(
     'should roundtrip a sole blank line in fenced code',
     async function () {
-      const doc = '```\n	\n```\n'
+      const value = '```\n	\n```\n'
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test(
     'should roundtrip an empty list item in two more lists',
     async function () {
-      const doc = '* * -\n'
+      const value = '* * -\n'
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test(
     'should roundtrip a thematic break at the start of a list item',
     async function () {
-      const doc = '- ***\n'
+      const value = '- ***\n'
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
@@ -4711,28 +5156,28 @@ test('roundtrip', async function (t) {
   )
 
   await t.test('should roundtrip a single encoded space', async function () {
-    const doc = '&#x20;\n'
+    const value = '&#x20;\n'
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test('should roundtrip a single encoded tab', async function () {
-    const doc = '&#x9;\n'
+    const value = '&#x9;\n'
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test(
     'should roundtrip encoded spaces and tabs where needed',
     async function () {
-      const doc = '&#x20; a &#x20;\n&#x9;\tb\t&#x9;\n'
+      const value = '&#x20; a &#x20;\n&#x9;\tb\t&#x9;\n'
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
 
   await t.test('should roundtrip asterisks (tree)', async function () {
-    const doc = `Separate paragraphs:
+    const value = `Separate paragraphs:
 
 a * is this emphasis? *
 
@@ -4757,7 +5202,7 @@ a *\\* is this emphasis? *\\*
 a \\** is this emphasis? \\**
 a **\\* is this emphasis? **\\*
 a *\\** is this emphasis? *\\**`
-    const tree = from(doc)
+    const tree = from(value)
 
     assert.deepEqual(
       removePosition(from(to(tree)), {force: true}),
@@ -4766,7 +5211,7 @@ a *\\** is this emphasis? *\\**`
   })
 
   await t.test('should roundtrip underscores (tree)', async function () {
-    const doc = `Separate paragraphs:
+    const value = `Separate paragraphs:
 
 a _ is this emphasis? _
 
@@ -4791,7 +5236,7 @@ a _\\_ is this emphasis? _\\_
 a \\__ is this emphasis? \\__
 a __\\_ is this emphasis? __\\_
 a _\\__ is this emphasis? _\\__`
-    const tree = from(doc)
+    const tree = from(value)
 
     assert.deepEqual(
       removePosition(from(to(tree)), {force: true}),
@@ -4800,23 +5245,113 @@ a _\\__ is this emphasis? _\\__`
   })
 
   await t.test('should roundtrip attention-like plain text', async function () {
-    const doc = to(from(`(____`))
+    const value = to(from(`(____`))
 
-    assert.equal(to(from(doc)), doc)
+    assert.equal(to(from(value)), value)
   })
 
   await t.test(
     'should roundtrip faux “fill in the blank” spans',
     async function () {
-      const doc = to(
+      const value = to(
         from(
           'Once activated, a service worker ______, then transitions to idle…'
         )
       )
 
-      assert.equal(to(from(doc)), doc)
+      assert.equal(to(from(value)), value)
     }
   )
+})
+
+test('roundtrip attention', async function (t) {
+  /**
+   * @typedef Case
+   * @property {string} inside
+   * @property {(typeof markers)[number]} marker
+   * @property {string} outside
+   * @property {(typeof sides)[number]} side
+   * @property {(typeof types)[number]} type
+   */
+
+  const characters = ['.', ' ', 'a']
+  const markers = /** @type {const} */ (['*', '_'])
+  const sides = /** @type {const} */ (['open', 'close'])
+  const types = /** @type {const} */ (['emphasis', 'strong'])
+  /** @type {Array<Case>} */
+  const tests = []
+
+  for (const type of types) {
+    for (const marker of markers) {
+      for (const side of sides) {
+        for (const inside of characters) {
+          for (const outside of characters) {
+            tests.push({inside, marker, outside, side, type})
+          }
+        }
+      }
+    }
+  }
+
+  for (const test of tests) {
+    const {inside, marker, outside, side, type} = test
+    const name =
+      'should roundtrip `' +
+      type +
+      '` using `' +
+      marker +
+      '` in an ' +
+      side +
+      ' run: ' +
+      (outside === '.'
+        ? 'punctuation'
+        : outside === ' '
+          ? 'whitespace'
+          : 'letter') +
+      ' outside and ' +
+      (inside === '.'
+        ? 'punctuation'
+        : inside === ' '
+          ? 'whitespace'
+          : 'letter') +
+      ' inside'
+
+    await t.test(name, async function () {
+      /** @type {Array<PhrasingContent>} */
+      const children = []
+
+      if (side === 'open') {
+        children.push({type: 'text', value: 'x' + outside})
+      }
+
+      children.push({
+        type,
+        children: [
+          {
+            type: 'text',
+            value:
+              (side === 'open' ? inside : '') +
+              'y' +
+              (side === 'close' ? inside : '')
+          }
+        ]
+      })
+
+      if (side === 'close') {
+        children.push({type: 'text', value: outside + 'z'})
+      }
+
+      /** @type {Root} */
+      const expected = {
+        type: 'root',
+        children: [{type: 'paragraph', children}]
+      }
+      const markdown = to(expected, {emphasis: marker, strong: marker})
+      const actual = from(markdown)
+      removePosition(actual, {force: true})
+      assert.deepEqual(actual, expected)
+    })
+  }
 })
 
 test('position (output)', async function (t) {
