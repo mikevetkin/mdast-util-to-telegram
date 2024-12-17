@@ -1706,13 +1706,11 @@ test.skip('heading', async function (t) {
   )
 })
 
-test('heading', { only: true }, async function (t) {
-
-  t.runOnly(true);
-
+test('heading', {only: true}, async function (t) {
+  t.runOnly(true)
   await t.test(
     'should serialize a heading w/o rank as a heading of rank 1',
-    { only: true },
+    {only: true},
     async function () {
       assert.equal(
         // @ts-expect-error: check how the runtime handles `children` missing.
@@ -1722,48 +1720,69 @@ test('heading', { only: true }, async function (t) {
     }
   )
 
-  await t.test('should serialize a heading w/ rank 1', async function () {
-    assert.equal(
-      // @ts-expect-error: check how the runtime handles `children` missing.
-      to({type: 'heading', depth: 1}),
-      '#\n'
-    )
-  })
+  t.runOnly(true)
+  await t.test(
+    'should serialize a heading w/ rank 1',
+    {only: true},
+    async function () {
+      assert.equal(
+        // @ts-expect-error: check how the runtime handles `children` missing.
+        to({type: 'heading', depth: 1}),
+        '****\n'
+      )
+    }
+  )
+  t.runOnly(true)
+  await t.test(
+    'should serialize a heading w/ rank 6',
+    {only: true},
+    async function () {
+      assert.equal(to({type: 'heading', depth: 6, children: []}), '****\n')
+    }
+  )
+  t.runOnly(true)
+  await t.test(
+    'should serialize a heading w/ rank 7 as 6',
+    {only: true},
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          // @ts-expect-error: check how the runtime handles `depth` being too high.
+          depth: 7,
+          children: []
+        }),
+        '****\n'
+      )
+    }
+  )
+  t.runOnly(true)
+  await t.test(
+    'should serialize a heading w/ rank 0 as 1',
+    {only: true},
+    async function () {
+      assert.equal(
+        to({
+          type: 'heading',
+          // @ts-expect-error: check how the runtime handles `depth` being too low.
+          depth: 0,
+          children: []
+        }),
+        '****\n'
+      )
+    }
+  )
 
-  await t.test('should serialize a heading w/ rank 6', async function () {
-    assert.equal(to({type: 'heading', depth: 6, children: []}), '######\n')
-  })
-
-  await t.test('should serialize a heading w/ rank 7 as 6', async function () {
-    assert.equal(
-      to({
-        type: 'heading',
-        // @ts-expect-error: check how the runtime handles `depth` being too high.
-        depth: 7,
-        children: []
-      }),
-      '######\n'
-    )
-  })
-
-  await t.test('should serialize a heading w/ rank 0 as 1', async function () {
-    assert.equal(
-      to({
-        type: 'heading',
-        // @ts-expect-error: check how the runtime handles `depth` being too low.
-        depth: 0,
-        children: []
-      }),
-      '#\n'
-    )
-  })
-
-  await t.test('should serialize a heading w/ content', { only: true }, async function () {
-    assert.equal(
-      to({type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]}),
-      '**a**\n'
-    )
-  })
+  await t.test(
+    'should serialize a heading w/ content',
+    {only: true},
+    async function () {
+      assert.equal(
+        to({type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]}),
+        '**a**\n'
+      )
+    }
+  )
 
   await t.test(
     'should serialize a heading w/ rank 1 as setext when `setext: true`',
