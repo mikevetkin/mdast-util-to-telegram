@@ -7,7 +7,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {removePosition} from 'unist-util-remove-position'
 import {fromMarkdown as from} from 'mdast-util-from-markdown'
-import {toMarkdown as to} from 'mdast-util-to-markdown'
+import {toTelegram as to} from '../lib/index.js'
 
 test('core', async function (t) {
   await t.test('should expose the public api', async function () {
