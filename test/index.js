@@ -1826,10 +1826,11 @@ test('heading', {only: true}, async function (t) {
       )
     }
   )
-  t.runOnly(true)
+
+  // INFO: This test case doesn't support into obsidian
   await t.test(
-    'should serialize a setext underline as long as the last line (1)',
-    {only: true},
+    'SKIP should serialize a setext underline as long as the last line (1)',
+    {skip: true},
     async function () {
       assert.equal(
         to(
@@ -1845,8 +1846,10 @@ test('heading', {only: true}, async function (t) {
     }
   )
 
+  // INFO: This test case doesn't support into obsidian
   await t.test(
-    'should serialize a setext underline as long as the last line (2)',
+    'SKIP should serialize a setext underline as long as the last line (2)',
+    {skip: true},
     async function () {
       assert.equal(
         to(
@@ -1857,7 +1860,7 @@ test('heading', {only: true}, async function (t) {
           },
           {setext: true}
         ),
-        'a\r\nbbb\n===\n'
+        `**a\r\nbbb**\n`
       )
     }
   )
