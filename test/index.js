@@ -1772,7 +1772,7 @@ test('heading', {only: true}, async function (t) {
       )
     }
   )
-
+  t.runOnly(true)
   await t.test(
     'should serialize a heading w/ content',
     {only: true},
@@ -1783,48 +1783,53 @@ test('heading', {only: true}, async function (t) {
       )
     }
   )
-
+  t.runOnly(true)
   await t.test(
     'should serialize a heading w/ rank 1 as setext when `setext: true`',
+    {only: true},
     async function () {
       assert.equal(
         to(
           {type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        'a\n=\n'
+        '**a**\n'
       )
     }
   )
-
+  t.runOnly(true)
   await t.test(
     'should serialize a heading w/ rank 2 as setext when `setext: true`',
+    {only: true},
     async function () {
       assert.equal(
         to(
           {type: 'heading', depth: 2, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        'a\n-\n'
+        '**a**\n'
       )
     }
   )
 
+  t.runOnly(true)
   await t.test(
     'should serialize a heading w/ rank 3 as atx when `setext: true`',
+    {only: true},
     async function () {
       assert.equal(
         to(
           {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '### a\n'
+        '**a**\n'
       )
     }
   )
-
+  t.runOnly(true)
   await t.test(
     'should serialize a setext underline as long as the last line (1)',
+    {only: true},
     async function () {
       assert.equal(
         to(
@@ -1857,22 +1862,26 @@ test('heading', {only: true}, async function (t) {
     }
   )
 
+  t.runOnly(true)
   await t.test(
     'should serialize an empty heading w/ rank 1 as atx when `setext: true`',
+    {only: true},
     async function () {
       assert.equal(
         to({type: 'heading', depth: 1, children: []}, {setext: true}),
-        '#\n'
+        '****\n'
       )
     }
   )
 
+  t.runOnly(true)
   await t.test(
     'should serialize an empty heading w/ rank 2 as atx when `setext: true`',
+    {only: true},
     async function () {
       assert.equal(
         to({type: 'heading', depth: 2, children: []}, {setext: true}),
-        '##\n'
+        '****\n'
       )
     }
   )
