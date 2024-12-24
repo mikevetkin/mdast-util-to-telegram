@@ -3327,57 +3327,73 @@ test('list', async function (t) {
   )
 })
 
-test('listItem', async function (t) {
+test('listItem', {only: true}, async function (t) {
   await t.test('should support a list item', async function () {
     // @ts-expect-error: check how the runtime handles `children` missing.
-    assert.equal(to({type: 'listItem'}), '*\n')
+    assert.equal(to({type: 'listItem'}), '•\n')
   })
 
   await t.test(
     'should serialize an item w/ a plus as bullet when `bullet: "+"`',
+
     async function () {
       assert.equal(to({type: 'listItem', children: []}, {bullet: '+'}), '+\n')
     }
   )
 
-  await t.test('should throw on an incorrect bullet', async function () {
-    assert.throws(function () {
-      to(
-        {type: 'listItem', children: []},
-        {
-          // @ts-expect-error: check how the runtime handles `bullet` being wrong.
-          bullet: '.'
-        }
+  await t.test(
+    'should throw on an incorrect bullet',
+
+    async function () {
+      assert.throws(function () {
+        to(
+          {type: 'listItem', children: []},
+          {
+            // @ts-expect-error: check how the runtime handles `bullet` being wrong.
+            bullet: '.'
+          }
+        )
+      }, /Cannot serialize items with `\.` for `options\.bullet`, expected `\*`, `\•`, `\+`, or `-`/)
+    }
+  )
+
+  await t.test(
+    'should support a list item w/ a child',
+
+    async function () {
+      assert.equal(
+        to({
+          type: 'listItem',
+          children: [
+            {type: 'paragraph', children: [{type: 'text', value: 'a'}]}
+          ]
+        }),
+        '• a\n'
       )
-    }, /Cannot serialize items with `\.` for `options\.bullet`, expected `\*`, `\+`, or `-`/)
-  })
+    }
+  )
 
-  await t.test('should support a list item w/ a child', async function () {
-    assert.equal(
-      to({
-        type: 'listItem',
-        children: [{type: 'paragraph', children: [{type: 'text', value: 'a'}]}]
-      }),
-      '* a\n'
-    )
-  })
+  await t.test(
+    'should support a list item w/ children',
 
-  await t.test('should support a list item w/ children', async function () {
-    assert.equal(
-      to({
-        type: 'listItem',
-        children: [
-          {type: 'paragraph', children: [{type: 'text', value: 'a'}]},
-          {type: 'thematicBreak'},
-          {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
-        ]
-      }),
-      '* a\n\n  ***\n\n  b\n'
-    )
-  })
+    async function () {
+      assert.equal(
+        to({
+          type: 'listItem',
+          children: [
+            {type: 'paragraph', children: [{type: 'text', value: 'a'}]},
+            {type: 'thematicBreak'},
+            {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
+          ]
+        }),
+        '• a\n\n  ***\n\n  b\n'
+      )
+    }
+  )
 
   await t.test(
     'should use one space after the bullet for `listItemIndent: "one"`',
+
     async function () {
       assert.equal(
         to(
@@ -3390,13 +3406,14 @@ test('listItem', async function (t) {
           },
           {listItemIndent: 'one'}
         ),
-        '* a\n\n  ***\n'
+        '• a\n\n  ***\n'
       )
     }
   )
 
   await t.test(
     'should use one space after the bullet for `listItemIndent: "mixed"`, when the item is not spread',
+
     async function () {
       assert.equal(
         to(
@@ -3408,13 +3425,14 @@ test('listItem', async function (t) {
           },
           {listItemIndent: 'mixed'}
         ),
-        '* a\n'
+        '• a\n'
       )
     }
   )
 
   await t.test(
     'should use a tab stop of spaces after the bullet for `listItemIndent: "mixed"`, when the item is spread',
+
     async function () {
       assert.equal(
         to(
@@ -3428,13 +3446,14 @@ test('listItem', async function (t) {
           },
           {listItemIndent: 'mixed'}
         ),
-        '*   a\n\n    ***\n'
+        '•   a\n\n    ***\n'
       )
     }
   )
 
   await t.test(
     'should throw on an incorrect `listItemIndent`',
+
     async function () {
       assert.throws(function () {
         to(
@@ -3450,6 +3469,7 @@ test('listItem', async function (t) {
 
   await t.test(
     'should not use blank lines between child blocks for items w/ `spread: false`',
+
     async function () {
       assert.equal(
         to({
@@ -3460,7 +3480,7 @@ test('listItem', async function (t) {
             {type: 'thematicBreak'}
           ]
         }),
-        '* a\n  ***\n'
+        '• a\n  ***\n'
       )
     }
   )
@@ -3468,22 +3488,24 @@ test('listItem', async function (t) {
   await t.test('should support `bulletOther`', async function () {
     assert.equal(
       to(createList(createList(createList())), {bulletOther: '+'}),
-      '* * +\n'
+      '• • •\n'
     )
   })
 
   await t.test(
     'should default to an `bulletOther` different from `bullet` (1)',
+
     async function () {
       assert.equal(
         to(createList(createList(createList())), {bullet: '-'}),
-        '- - *\n'
+        '- - •\n'
       )
     }
   )
 
   await t.test(
     'should default to an `bulletOther` different from `bullet` (2)',
+
     async function () {
       assert.equal(
         to(createList(createList(createList())), {bullet: '*'}),
@@ -3494,6 +3516,7 @@ test('listItem', async function (t) {
 
   await t.test(
     'should throw when given an incorrect `bulletOther`',
+
     async function () {
       assert.throws(function () {
         to(createList(createList(createList())), {
@@ -3506,6 +3529,7 @@ test('listItem', async function (t) {
 
   await t.test(
     'should throw when an `bulletOther` is given equal to `bullet`',
+
     async function () {
       assert.throws(function () {
         to(createList(createList(createList())), {
@@ -3518,19 +3542,21 @@ test('listItem', async function (t) {
 
   await t.test(
     'should use a different bullet than a thematic rule marker, if the first child of a list item is a thematic break (1)',
+
     async function () {
       assert.equal(
         to({
           type: 'list',
           children: [{type: 'listItem', children: [{type: 'thematicBreak'}]}]
         }),
-        '- ***\n'
+        '• ***\n'
       )
     }
   )
 
   await t.test(
     'should use a different bullet than a thematic rule marker, if the first child of a list item is a thematic break (2)',
+
     async function () {
       assert.equal(
         to({
@@ -3545,27 +3571,30 @@ test('listItem', async function (t) {
             {type: 'listItem', children: [{type: 'thematicBreak'}]}
           ]
         }),
-        '- a\n\n- ***\n'
+        '• a\n\n• ***\n'
       )
     }
   )
 
   await t.test(
     'should *not* use a different bullet for an empty list item in two lists',
+
     async function () {
-      assert.equal(to(createList(createList())), '* *\n')
+      assert.equal(to(createList(createList())), '• •\n')
     }
   )
 
   await t.test(
     'should use a different bullet for an empty list item in three lists (1)',
+
     async function () {
-      assert.equal(to(createList(createList(createList()))), '* * -\n')
+      assert.equal(to(createList(createList(createList()))), '• • •\n')
     }
   )
 
   await t.test(
     'should use a different bullet for an empty list item in three lists (2)',
+
     async function () {
       assert.equal(
         to({
@@ -3575,13 +3604,14 @@ test('listItem', async function (t) {
             {type: 'listItem', children: [createList(createList())]}
           ]
         }),
-        '*\n\n* * -\n'
+        '•\n\n• • •\n'
       )
     }
   )
 
   await t.test(
     'should not use a different bullet for an empty list item in three lists if `bullet` isn’t a thematic rule marker',
+
     async function () {
       assert.equal(
         to(createList(createList(createList())), {bullet: '+'}),
@@ -3592,26 +3622,29 @@ test('listItem', async function (t) {
 
   await t.test(
     'should use a different bullet for an empty list item in four lists',
+
     async function () {
       assert.equal(
         to(createList(createList(createList(createList())))),
-        '* * * -\n'
+        '• • • •\n'
       )
     }
   )
 
   await t.test(
     'should use a different bullet for an empty list item in five lists',
+
     async function () {
       assert.equal(
         to(createList(createList(createList(createList(createList()))))),
-        '* * * * -\n'
+        '• • • • •\n'
       )
     }
   )
 
   await t.test(
     'should not use a different bullet for an empty list item at non-head in two lists',
+
     async function () {
       assert.equal(
         to(
@@ -3625,27 +3658,32 @@ test('listItem', async function (t) {
             ])
           )
         ),
-        '* * * a\n\n    -\n'
+        '• • • a\n\n    •\n'
       )
     }
   )
 
-  await t.test('should support `bulletOrdered`', async function () {
-    assert.equal(
-      to(
-        {
-          type: 'list',
-          ordered: true,
-          children: [{type: 'listItem', children: []}]
-        },
-        {bulletOrdered: ')'}
-      ),
-      '1)\n'
-    )
-  })
+  await t.test(
+    'should support `bulletOrdered`',
+
+    async function () {
+      assert.equal(
+        to(
+          {
+            type: 'list',
+            ordered: true,
+            children: [{type: 'listItem', children: []}]
+          },
+          {bulletOrdered: ')'}
+        ),
+        '1)\n'
+      )
+    }
+  )
 
   await t.test(
     'should throw on a `bulletOrdered` that is invalid',
+
     async function () {
       assert.throws(function () {
         to(
@@ -3665,6 +3703,7 @@ test('listItem', async function (t) {
 
   await t.test(
     'should use a different bullet for adjacent ordered lists',
+
     async function () {
       assert.equal(
         to(
