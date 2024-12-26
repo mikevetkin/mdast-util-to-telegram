@@ -854,10 +854,7 @@ test('code (flow)', {only: true}, async function (t) {
     'should encode a space in `lang`',
 
     async function () {
-      assert.equal(
-        to({type: 'code', lang: 'a b', value: ''}),
-        '```a&#x20;b\n```\n'
-      )
+      assert.equal(to({type: 'code', lang: 'a b', value: ''}), '```a b\n```\n')
     }
   )
 
@@ -867,7 +864,7 @@ test('code (flow)', {only: true}, async function (t) {
     async function () {
       assert.equal(
         to({type: 'code', lang: 'a\nb', value: ''}),
-        '```a&#xA;b\n```\n'
+        '```a\nb\n```\n'
       )
     }
   )
@@ -876,10 +873,7 @@ test('code (flow)', {only: true}, async function (t) {
     'should encode a grave accent in `lang`',
 
     async function () {
-      assert.equal(
-        to({type: 'code', lang: 'a`b', value: ''}),
-        '```a&#x60;b\n```\n'
-      )
+      assert.equal(to({type: 'code', lang: 'a`b', value: ''}), '```a`b\n```\n')
     }
   )
 
@@ -3860,6 +3854,20 @@ test('strong', {only: true}, async function (t) {
 })
 
 test('text', {only: true}, async function (t) {
+  await t.test('should not be first slash', async function () {
+    assert.equal(
+      to({
+        type: 'paragraph',
+        children: [
+          {
+            type: 'text',
+            value: '[[00 Свойства - знание]] '
+          }
+        ]
+      }),
+      '[[00 Свойства - знание]] \n'
+    )
+  })
   await t.test('should support a void text', async function () {
     // @ts-expect-error: check how the runtime handles `value` missing.
     assert.equal(to({type: 'text'}), '')
