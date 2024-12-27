@@ -1395,7 +1395,7 @@ test('heading', {only: true}, async function (t) {
     async function () {
       assert.equal(
         to({type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]}),
-        '**a**\n'
+        '\n**a**\n'
       )
     }
   )
@@ -1409,7 +1409,7 @@ test('heading', {only: true}, async function (t) {
           {type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '**a**\n'
+        '\n**a**\n'
       )
     }
   )
@@ -1423,7 +1423,7 @@ test('heading', {only: true}, async function (t) {
           {type: 'heading', depth: 2, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '**a**\n'
+        '\n**a**\n'
       )
     }
   )
@@ -1438,7 +1438,7 @@ test('heading', {only: true}, async function (t) {
           {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '**a**\n'
+        '\n**a**\n'
       )
     }
   )
@@ -1457,7 +1457,7 @@ test('heading', {only: true}, async function (t) {
           },
           {setext: true}
         ),
-        'aa\rb\n-\n'
+        '\naa\rb\n-\n'
       )
     }
   )
@@ -1476,7 +1476,7 @@ test('heading', {only: true}, async function (t) {
           },
           {setext: true}
         ),
-        `**a\r\nbbb**\n`
+        `\n**a\r\nbbb**\n`
       )
     }
   )
@@ -1591,7 +1591,7 @@ test('heading', {only: true}, async function (t) {
           {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
           {closeAtx: true}
         ),
-        '**a**\n'
+        '\n**a**\n'
       )
     }
   )
@@ -1607,7 +1607,7 @@ test('heading', {only: true}, async function (t) {
           depth: 2,
           children: [{type: 'text', value: '# a'}]
         }),
-        '**# a**\n'
+        '\n**# a**\n'
       )
     }
   )
@@ -1623,7 +1623,7 @@ test('heading', {only: true}, async function (t) {
           depth: 2,
           children: [{type: 'text', value: '1) a'}]
         }),
-        '**1) a**\n'
+        '\n**1) a**\n'
       )
     }
   )
@@ -1639,7 +1639,7 @@ test('heading', {only: true}, async function (t) {
           depth: 2,
           children: [{type: 'text', value: '+ a'}]
         }),
-        '**+ a**\n'
+        '\n**+ a**\n'
       )
     }
   )
@@ -1655,7 +1655,7 @@ test('heading', {only: true}, async function (t) {
           depth: 2,
           children: [{type: 'text', value: '- a'}]
         }),
-        '**- a**\n'
+        '\n**- a**\n'
       )
     }
   )
@@ -1671,7 +1671,7 @@ test('heading', {only: true}, async function (t) {
           depth: 2,
           children: [{type: 'text', value: '= a'}]
         }),
-        '**= a**\n'
+        '\n**= a**\n'
       )
     }
   )
@@ -1686,7 +1686,7 @@ test('heading', {only: true}, async function (t) {
           depth: 2,
           children: [{type: 'text', value: '> a'}]
         }),
-        '**> a**\n'
+        '\n**> a**\n'
       )
     }
   )
@@ -1701,7 +1701,7 @@ test('heading', {only: true}, async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a #'}]
         }),
-        '**a #**\n'
+        '\n**a #**\n'
       )
     }
   )
@@ -1717,7 +1717,7 @@ test('heading', {only: true}, async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a ##'}]
         }),
-        '**a ##**\n'
+        '\n**a ##**\n'
       )
     }
   )
@@ -1733,7 +1733,7 @@ test('heading', {only: true}, async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a # b'}]
         }),
-        '**a # b**\n'
+        '\n**a # b**\n'
       )
     }
   )
@@ -1749,7 +1749,7 @@ test('heading', {only: true}, async function (t) {
           depth: 1,
           children: [{type: 'text', value: '  a'}]
         }),
-        '**&#x20; a**\n'
+        '\n**&#x20; a**\n'
       )
     }
   )
@@ -1779,7 +1779,7 @@ test('heading', {only: true}, async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a  '}]
         }),
-        '**a  **\n'
+        '\n**a  **\n'
       )
     }
   )
