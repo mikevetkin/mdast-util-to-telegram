@@ -3380,7 +3380,7 @@ test('listItem', {only: true}, async function (t) {
             {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
           ]
         }),
-        '• a\n\n  ***\n\n  b\n'
+        '• a\n  ***\n  b\n'
       )
     }
   )
@@ -3400,7 +3400,7 @@ test('listItem', {only: true}, async function (t) {
           },
           {listItemIndent: 'one'}
         ),
-        '• a\n\n  ***\n'
+        '• a\n  ***\n'
       )
     }
   )
@@ -3440,7 +3440,7 @@ test('listItem', {only: true}, async function (t) {
           },
           {listItemIndent: 'mixed'}
         ),
-        '•   a\n\n    ***\n'
+        '•   a\n    ***\n'
       )
     }
   )
@@ -3565,7 +3565,7 @@ test('listItem', {only: true}, async function (t) {
             {type: 'listItem', children: [{type: 'thematicBreak'}]}
           ]
         }),
-        '• a\n\n• ***\n'
+        '• a\n• ***\n'
       )
     }
   )
@@ -3598,7 +3598,7 @@ test('listItem', {only: true}, async function (t) {
             {type: 'listItem', children: [createList(createList())]}
           ]
         }),
-        '•\n\n• • •\n'
+        '•\n• • •\n'
       )
     }
   )
@@ -3652,7 +3652,7 @@ test('listItem', {only: true}, async function (t) {
             ])
           )
         ),
-        '• • • a\n\n    •\n'
+        '• • • a\n    •\n'
       )
     }
   )
@@ -3718,7 +3718,7 @@ test('listItem', {only: true}, async function (t) {
           },
           {bulletOrdered: ')'}
         ),
-        '1)\n\n1.\n'
+        '1)\n1.\n'
       )
     }
   )
@@ -3865,7 +3865,7 @@ test('text', {only: true}, async function (t) {
           }
         ]
       }),
-      '[[00 Свойства - знание]] \n'
+      '00 Свойства - знание \n'
     )
   })
   await t.test('should support a void text', async function () {
