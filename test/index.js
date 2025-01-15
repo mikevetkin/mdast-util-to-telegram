@@ -3724,7 +3724,102 @@ test('listItem', {only: true}, async function (t) {
   )
 })
 
-test('paragraph', async function (t) {
+test('paragraph', {only: true}, async function (t) {
+  t.runOnly(true)
+  await t.test(
+    'should support useless spaces',
+    {only: true},
+    async function () {
+      assert.equal(
+        // @ts-expect-error: check how the runtime handles `children` missing.
+        to({
+          type: 'root',
+          children: [
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  type: 'text',
+                  value: '1',
+                  position: {
+                    start: {
+                      line: 1,
+                      column: 1,
+                      offset: 0
+                    },
+                    end: {
+                      line: 1,
+                      column: 2,
+                      offset: 1
+                    }
+                  }
+                }
+              ],
+              position: {
+                start: {
+                  line: 1,
+                  column: 1,
+                  offset: 0
+                },
+                end: {
+                  line: 1,
+                  column: 2,
+                  offset: 1
+                }
+              }
+            },
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  type: 'text',
+                  value: '2',
+                  position: {
+                    start: {
+                      line: 5,
+                      column: 1,
+                      offset: 5
+                    },
+                    end: {
+                      line: 5,
+                      column: 2,
+                      offset: 6
+                    }
+                  }
+                }
+              ],
+              position: {
+                start: {
+                  line: 5,
+                  column: 1,
+                  offset: 5
+                },
+                end: {
+                  line: 5,
+                  column: 2,
+                  offset: 6
+                }
+              }
+            }
+          ],
+          position: {
+            start: {
+              line: 1,
+              column: 1,
+              offset: 0
+            },
+            end: {
+              line: 5,
+              column: 2,
+              offset: 6
+            }
+          }
+        }),
+        '1\n\n\n\n2'
+      )
+    }
+  )
+
   await t.test('should support an empty paragraph', async function () {
     assert.equal(
       // @ts-expect-error: check how the runtime handles `children` missing.
