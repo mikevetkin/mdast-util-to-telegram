@@ -55,7 +55,7 @@
     "util",
     "telegram"
   ],
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "name": "mdast-util-to-telegram",
   "prettier": {
     "bracketSpacing": false,
@@ -71,7 +71,7 @@
     ]
   },
   "repository": "mikevetkin/mdast-util-to-telegram",
-  "version": "2.1.2",
+  "version": "0.0.5",
   "scripts": {
     "prepack": "npm run build && npm run format",
     "build": "tsc --build --clean && tsc --build && type-coverage",
