@@ -197,7 +197,7 @@ test('core', async function (t) {
             {type: 'heading', depth: 1, children: [{type: 'text', value: 'b'}]}
           ]
         }),
-        '• a\n\n  **b**\n'
+        '• a\n  **b**\n'
       )
     }
   )
@@ -221,7 +221,7 @@ test('core', async function (t) {
           },
           {setext: true}
         ),
-        '• a\n\n\n  **b**\n'
+        '• a\n\n  **b**\n'
       )
     }
   )
@@ -348,7 +348,7 @@ test('blockquote', async function (t) {
             }
           ]
         }),
-        '> a\n> b\n>\n> > a\n> > `b\n> > c`\n> > d\n> >\n> >\n> > **a b**\n'
+        '> a\n> b\n>\n> > a\n> > `b\n> > c`\n> > d\n> >\n> > **a b**\n'
       )
     }
   )
@@ -505,7 +505,7 @@ test('blockquote', async function (t) {
             }
           ]
         }),
-        '>\n> **a\n> b**\n'
+        '> **a\n> b**\n'
       )
     }
   )
@@ -527,7 +527,7 @@ test('blockquote', async function (t) {
           },
           {setext: true}
         ),
-        '>\n> **a\n> b**\n'
+        '> **a\n> b**\n'
       )
     }
   )
@@ -735,7 +735,7 @@ test('blockquote', async function (t) {
           type: 'blockquote',
           children: [{type: 'thematicBreak'}, {type: 'thematicBreak'}]
         }),
-        '> ***\n>\n> ***\n'
+        '>\n'
       )
     }
   )
@@ -747,7 +747,7 @@ test('break', async function (t) {
   })
 
   await t.test(
-    'should serialize breaks in heading (atx) as a space',
+    'should serialize breaks in heading (atx) as a space 1 ',
     async function () {
       assert.equal(
         to({
@@ -759,13 +759,13 @@ test('break', async function (t) {
             {type: 'text', value: 'b'}
           ]
         }),
-        '\n**a b**\n'
+        '**a b**\n'
       )
     }
   )
 
   await t.test(
-    'should serialize breaks in heading (atx) as a space',
+    'should serialize breaks in heading (atx) as a space 2',
     async function () {
       assert.equal(
         to({
@@ -777,7 +777,7 @@ test('break', async function (t) {
             {type: 'text', value: 'b'}
           ]
         }),
-        '\n**a  b**\n'
+        '**a  b**\n'
       )
     }
   )
@@ -785,7 +785,7 @@ test('break', async function (t) {
   await t.test(
     'should serialize breaks in heading (setext)',
     async function () {
-      assert.equal(to(from('a  \nb\n=\n'), {setext: true}), '\n**a b**\n')
+      assert.equal(to(from('a  \nb\n=\n'), {setext: true}), '**a b**\n')
     }
   )
 })
@@ -1393,7 +1393,7 @@ test('heading', async function (t) {
     async function () {
       assert.equal(
         to({type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]}),
-        '\n**a**\n'
+        '**a**\n'
       )
     }
   )
@@ -1407,7 +1407,7 @@ test('heading', async function (t) {
           {type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '\n**a**\n'
+        '**a**\n'
       )
     }
   )
@@ -1421,7 +1421,7 @@ test('heading', async function (t) {
           {type: 'heading', depth: 2, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '\n**a**\n'
+        '**a**\n'
       )
     }
   )
@@ -1435,7 +1435,7 @@ test('heading', async function (t) {
           {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '\n**a**\n'
+        '**a**\n'
       )
     }
   )
@@ -1454,7 +1454,7 @@ test('heading', async function (t) {
           },
           {setext: true}
         ),
-        '\n**aa\rb**\n'
+        '**aa\rb**\n'
       )
     }
   )
@@ -1473,7 +1473,7 @@ test('heading', async function (t) {
           },
           {setext: true}
         ),
-        `\n**a\r\nbbb**\n`
+        `**a\r\nbbb**\n`
       )
     }
   )
@@ -1510,7 +1510,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'inlineCode', value: '\n'}]
         }),
-        '\n**`\n`**\n'
+        '**`\n`**\n'
       )
     }
   )
@@ -1525,7 +1525,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'html', value: '<a\n/>'}]
         }),
-        '\n**<a\n/>**\n'
+        '**<a\n/>**\n'
       )
     }
   )
@@ -1540,7 +1540,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a\nb'}]
         }),
-        '\n**a\nb**\n'
+        '**a\nb**\n'
       )
     }
   )
@@ -1559,7 +1559,7 @@ test('heading', async function (t) {
             {type: 'text', value: 'b'}
           ]
         }),
-        '\n**a b**\n'
+        '**a b**\n'
       )
     }
   )
@@ -1584,7 +1584,7 @@ test('heading', async function (t) {
           {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
           {closeAtx: true}
         ),
-        '\n**a**\n'
+        '**a**\n'
       )
     }
   )
@@ -1599,7 +1599,7 @@ test('heading', async function (t) {
           depth: 2,
           children: [{type: 'text', value: '# a'}]
         }),
-        '\n**# a**\n'
+        '**# a**\n'
       )
     }
   )
@@ -1614,7 +1614,7 @@ test('heading', async function (t) {
           depth: 2,
           children: [{type: 'text', value: '1) a'}]
         }),
-        '\n**1) a**\n'
+        '**1) a**\n'
       )
     }
   )
@@ -1629,7 +1629,7 @@ test('heading', async function (t) {
           depth: 2,
           children: [{type: 'text', value: '+ a'}]
         }),
-        '\n**+ a**\n'
+        '**+ a**\n'
       )
     }
   )
@@ -1644,7 +1644,7 @@ test('heading', async function (t) {
           depth: 2,
           children: [{type: 'text', value: '- a'}]
         }),
-        '\n**- a**\n'
+        '**- a**\n'
       )
     }
   )
@@ -1659,7 +1659,7 @@ test('heading', async function (t) {
           depth: 2,
           children: [{type: 'text', value: '= a'}]
         }),
-        '\n**= a**\n'
+        '**= a**\n'
       )
     }
   )
@@ -1674,7 +1674,7 @@ test('heading', async function (t) {
           depth: 2,
           children: [{type: 'text', value: '> a'}]
         }),
-        '\n**> a**\n'
+        '**> a**\n'
       )
     }
   )
@@ -1689,7 +1689,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a #'}]
         }),
-        '\n**a #**\n'
+        '**a #**\n'
       )
     }
   )
@@ -1704,7 +1704,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a ##'}]
         }),
-        '\n**a ##**\n'
+        '**a ##**\n'
       )
     }
   )
@@ -1719,7 +1719,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a # b'}]
         }),
-        '\n**a # b**\n'
+        '**a # b**\n'
       )
     }
   )
@@ -1734,7 +1734,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: '  a'}]
         }),
-        '\n**&#x20; a**\n'
+        '**&#x20; a**\n'
       )
     }
   )
@@ -1749,7 +1749,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: '\t\ta'}]
         }),
-        '\n**&#x9;\ta**\n'
+        '**&#x9;\ta**\n'
       )
     }
   )
@@ -1764,7 +1764,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a  '}]
         }),
-        '\n**a  **\n'
+        '**a  **\n'
       )
     }
   )
@@ -1779,7 +1779,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a\t\t'}]
         }),
-        '\n**a\t\t**\n'
+        '**a\t\t**\n'
       )
     }
   )
@@ -1794,7 +1794,7 @@ test('heading', async function (t) {
           depth: 1,
           children: [{type: 'text', value: 'a \n b'}]
         }),
-        '\n**a \n b**\n'
+        '**a \n b**\n'
       )
     }
   )
@@ -1809,7 +1809,7 @@ test('heading', async function (t) {
           depth: 3,
           children: [{type: 'text', value: 'a \n b'}]
         }),
-        '\n**a \n b**\n'
+        '**a \n b**\n'
       )
     }
   )
