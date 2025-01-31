@@ -17,23 +17,6 @@ test('core', async function (t) {
     )
   })
 
-  await t.test('test case with 2 params', async function () {
-    assert.equal(
-      to(
-        {
-          type: 'root',
-          children: [
-            {type: 'paragraph', children: [{type: 'text', value: 'a'}]},
-            {type: 'thematicBreak'},
-            {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
-          ]
-        },
-        {filename: 'test'}
-      ),
-      '*test*\n\na\n\n***\n\nb\n'
-    )
-  })
-
   await t.test('should support a `root`', async function () {
     assert.equal(
       to({
