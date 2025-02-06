@@ -2,7 +2,7 @@
   "name": "mdast-util-to-telegram",
   "description": "mdast utility to serialize telegram messages",
   "license": "GPL-3.0-or-later",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "author": "Michael Vetkin <mikevetkin@gmail.com> (https://mikevetkin.com)",
   "bugs": "https://github.com/mikevetkin/mdast-util-to-telegram/issues",
   "contributors": [
