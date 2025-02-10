@@ -27,7 +27,7 @@ test('core', async function (t) {
           {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
         ]
       }),
-      { text: 'a\n\n***\n\nb\n', html: 'a\n\n***\n\nb\n' }
+      {text: 'a\n\n***\n\nb\n', html: 'a\n\n***\n\nb\n'}
     )
   })
 
@@ -43,7 +43,7 @@ test('core', async function (t) {
             {type: 'text', value: 'b'}
           ]
         }),
-        { text: 'a\\\nb\n', html: 'a\\\nb\n' }
+        {text: 'a\\\nb\n', html: 'a\\\nb\n'}
       )
     }
   )
@@ -59,7 +59,10 @@ test('core', async function (t) {
           {type: 'paragraph', children: [{type: 'text', value: 'd'}]}
         ]
       }),
-      { text: 'a\n\n[b]: <>\n\n[c]: <>\n\nd\n', html: 'a\n\n[b]: <>\n\n[c]: <>\n\nd\n' }
+      {
+        text: 'a\n\n[b]: <>\n\n[c]: <>\n\nd\n',
+        html: 'a\n\n[b]: <>\n\n[c]: <>\n\nd\n'
+      }
     )
   })
 
@@ -79,7 +82,10 @@ test('core', async function (t) {
           },
           {tightDefinitions: true}
         ),
-        { text: 'a\n\n[b]: <>\n[c]: <>\n\nd\n', html: 'a\n\n[b]: <>\n[c]: <>\n\nd\n' }
+        {
+          text: 'a\n\n[b]: <>\n[c]: <>\n\nd\n',
+          html: 'a\n\n[b]: <>\n[c]: <>\n\nd\n'
+        }
       )
     }
   )
@@ -107,7 +113,10 @@ test('core', async function (t) {
             {type: 'paragraph', children: [{type: 'text', value: 'd'}]}
           ]
         }),
-        { text: 'a\n\n•\n\n•\n\n1.\n\n1)\n\nd\n', html: 'a\n\n•\n\n•\n\n1.\n\n1)\n\nd\n' }
+        {
+          text: 'a\n\n•\n\n•\n\n1.\n\n1)\n\nd\n',
+          html: 'a\n\n•\n\n•\n\n1.\n\n1)\n\nd\n'
+        }
       )
     }
   )
@@ -127,7 +136,10 @@ test('core', async function (t) {
           },
           {fences: false}
         ),
-        { text: '    a\n\n•\n\n<!---->\n\n    b\n', html: '    a\n\n•\n\n<!---->\n\n    b\n' }
+        {
+          text: '    a\n\n•\n\n<!---->\n\n    b\n',
+          html: '    a\n\n•\n\n<!---->\n\n    b\n'
+        }
       )
     }
   )
@@ -146,7 +158,10 @@ test('core', async function (t) {
           },
           {fences: false}
         ),
-        { text: '    a\n\n<!---->\n\n    b\n', html: '    a\n\n<!---->\n\n    b\n' }
+        {
+          text: '    a\n\n<!---->\n\n    b\n',
+          html: '    a\n\n<!---->\n\n    b\n'
+        }
       )
     }
   )
@@ -163,7 +178,7 @@ test('core', async function (t) {
             {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
           ]
         }),
-        { text: '• a\n\n  b\n', html: '• a\n\n  b\n' }
+        {text: '• a\n\n  b\n', html: '• a\n\n  b\n'}
       )
     }
   )
@@ -180,7 +195,7 @@ test('core', async function (t) {
             {type: 'definition', identifier: 'b', label: 'c', url: 'd'}
           ]
         }),
-        { text: '• a\n\n  [c]: d\n', html: '• a\n\n  [c]: d\n' }
+        {text: '• a\n\n  [c]: d\n', html: '• a\n\n  [c]: d\n'}
       )
     }
   )
@@ -197,7 +212,7 @@ test('core', async function (t) {
             {type: 'heading', depth: 1, children: [{type: 'text', value: 'b'}]}
           ]
         }),
-        { text: '• a\n  **b**\n', html: '• a\n  **b**\n' }
+        {text: '• a\n  **b**\n', html: '• a\n  **b**\n'}
       )
     }
   )
@@ -221,7 +236,7 @@ test('core', async function (t) {
           },
           {setext: true}
         ),
-        { text: '• a\n\n  **b**\n', html: '• a\n\n  **b**\n' }
+        {text: '• a\n\n  **b**\n', html: '• a\n\n  **b**\n'}
       )
     }
   )
@@ -251,7 +266,7 @@ test('core', async function (t) {
   })
 })
 
-test('blockquote', { skip: true }, async function (t) {
+test('blockquote', {skip: true}, async function (t) {
   await t.test('should support a block quote', async function () {
     // @ts-expect-error: check how the runtime handles `children` missing.
     assert.equal(to({type: 'blockquote'}), '>\n')
@@ -741,7 +756,7 @@ test('blockquote', { skip: true }, async function (t) {
   )
 })
 
-test('break', { skip: true }, async function (t) {
+test('break', {skip: true}, async function (t) {
   await t.test('should support a break', async function () {
     assert.equal(to({type: 'break'}), '\\\n')
   })
@@ -790,7 +805,7 @@ test('break', { skip: true }, async function (t) {
   )
 })
 
-test('code (flow)', { skip: true }, async function (t) {
+test('code (flow)', {skip: true}, async function (t) {
   await t.test('should support empty code', async function () {
     // @ts-expect-error: check how the runtime handles `value` missing.
     assert.equal(to({type: 'code'}), '```\n```\n')
@@ -1033,7 +1048,7 @@ test('code (flow)', { skip: true }, async function (t) {
   )
 })
 
-test('definition', { skip: true }, async function (t) {
+test('definition', {skip: true}, async function (t) {
   await t.test('should support a definition w/o label', async function () {
     assert.equal(
       // @ts-expect-error: check how the runtime handles `identifier`, `url` missing.
@@ -1282,7 +1297,7 @@ test('definition', { skip: true }, async function (t) {
   )
 })
 
-test('emphasis', { skip: true }, async function (t) {
+test('emphasis', {skip: true}, async function (t) {
   await t.test('should support an empty emphasis', async function () {
     assert.equal(
       // @ts-expect-error: check how the runtime handles `children` missing.
@@ -1322,7 +1337,7 @@ test('emphasis', { skip: true }, async function (t) {
   )
 })
 
-test('heading', { skip: true }, async function (t) {
+test('heading', {skip: true}, async function (t) {
   await t.test(
     'should serialize a heading w/o rank as a heading of rank 1',
 
@@ -1815,7 +1830,7 @@ test('heading', { skip: true }, async function (t) {
   )
 })
 
-test('html', { skip: true }, async function (t) {
+test('html', {skip: true}, async function (t) {
   await t.test('should support a void html', async function () {
     // @ts-expect-error: check how the runtime handles `value` missing
     assert.equal(to({type: 'html'}), '')
@@ -1891,7 +1906,7 @@ test('html', { skip: true }, async function (t) {
   })
 })
 
-test('image', { skip: true }, async function (t) {
+test('image', {skip: true}, async function (t) {
   await t.test('should support an image', async function () {
     // @ts-expect-error: check how the runtime handles `alt`, `url` missing.
     assert.equal(to({type: 'image'}), '![]()\n')
@@ -2022,7 +2037,7 @@ test('image', { skip: true }, async function (t) {
   )
 })
 
-test('imageReference', { skip: true }, async function (t) {
+test('imageReference', {skip: true}, async function (t) {
   await t.test(
     'should support a link reference (nonsensical)',
     async function () {
@@ -2186,7 +2201,7 @@ test('imageReference', { skip: true }, async function (t) {
   )
 })
 
-test('code (text)', { skip: true }, async function (t) {
+test('code (text)', {skip: true}, async function (t) {
   await t.test(
     'should support an empty code text',
 
@@ -2295,7 +2310,7 @@ test('code (text)', { skip: true }, async function (t) {
   })
 })
 
-test('link', { skip: true }, async function (t) {
+test('link', {skip: true}, async function (t) {
   await t.test('should support a link', async function () {
     // @ts-expect-error: check how the runtime handles `children`, `url` missing.
     assert.equal(to({type: 'link'}), '[]()\n')
@@ -2604,7 +2619,7 @@ test('link', { skip: true }, async function (t) {
   )
 })
 
-test('linkReference', { skip: true }, async function (t) {
+test('linkReference', {skip: true}, async function (t) {
   await t.test(
     'should support a link reference (nonsensical)',
     async function () {
@@ -2816,7 +2831,7 @@ test('linkReference', { skip: true }, async function (t) {
   )
 })
 
-test('list', { skip: true }, async function (t) {
+test('list', {skip: true}, async function (t) {
   await t.test('should support an empty list', async function () {
     // @ts-expect-error: check how the runtime handles `children` missing.
     assert.equal(to({type: 'list'}), '')
@@ -3303,7 +3318,7 @@ test('list', { skip: true }, async function (t) {
   )
 })
 
-test('listItem', { skip: true }, async function (t) {
+test('listItem', {skip: true}, async function (t) {
   await t.test('should support a list item', async function () {
     // @ts-expect-error: check how the runtime handles `children` missing.
     assert.equal(to({type: 'listItem'}), '•\n')
@@ -3706,7 +3721,7 @@ test('listItem', { skip: true }, async function (t) {
   )
 })
 
-test('paragraph', { skip: true }, async function (t) {
+test('paragraph', {skip: true}, async function (t) {
   await t.test('should support an empty paragraph', async function () {
     assert.equal(
       // @ts-expect-error: check how the runtime handles `children` missing.
@@ -3786,7 +3801,7 @@ test('paragraph', { skip: true }, async function (t) {
   )
 })
 
-test('strong', { skip: true }, async function (t) {
+test('strong', {skip: true}, async function (t) {
   await t.test(
     'should support an empty strong',
 
@@ -3835,7 +3850,7 @@ test('strong', { skip: true }, async function (t) {
   )
 })
 
-test('text', { skip: true }, async function (t) {
+test('text', {skip: true}, async function (t) {
   await t.test('should not be first slash', async function () {
     assert.equal(
       to({
@@ -3864,7 +3879,7 @@ test('text', { skip: true }, async function (t) {
   })
 })
 
-test('thematic break', { skip: true }, async function (t) {
+test('thematic break', {skip: true}, async function (t) {
   await t.test('should support a thematic break', async function () {
     assert.equal(to({type: 'thematicBreak'}), '***\n')
   })
@@ -3922,16 +3937,21 @@ test('thematic break', { skip: true }, async function (t) {
   )
 })
 
-test('escape', { skip: true }, async function (t) {
+test('escape', async function (t) {
   await t.test(
     'should escape what would otherwise be a block quote in a paragraph',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: '> a\n> b\nc >'}]
         }),
-        '> a\n> b\nc >\n'
+        {
+          html:
+            '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a b</blockquote>\n' +
+            'c >\n',
+          text: '> a\n> b\nc >\n'
+        }
       )
     }
   )
@@ -3939,14 +3959,17 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a block quote in a list item',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'listItem',
           children: [
             {type: 'paragraph', children: [{type: 'text', value: '> a\n> b'}]}
           ]
         }),
-        '• > a\n  > b\n'
+        {
+          html: '• > a\n  > b\n',
+          text: '• > a\n  > b\n'
+        }
       )
     }
   )
@@ -3954,14 +3977,17 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a block quote in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
             {type: 'paragraph', children: [{type: 'text', value: '> a\n> b'}]}
           ]
         }),
-        '> > a\n> > b\n'
+        {
+          html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">> a > b</blockquote>\n',
+          text: '> > a\n> > b\n'
+        }
       )
     }
   )
@@ -3969,9 +3995,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a break',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: 'a\\\nb'}]}),
-        'a\\\nb\n'
+        {
+          html: 'a\\\nb\n',
+          text: 'a\\\nb\n'
+        }
       )
     }
   )
@@ -3979,9 +4008,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a named character reference',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '&amp'}]}),
-        '&amp\n'
+        {
+          html: '&amp\n',
+          text: '&amp\n'
+        }
       )
     }
   )
@@ -3989,9 +4021,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a numeric character reference',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '&#9;'}]}),
-        '&#9;\n'
+        {
+          html: '&#9;\n',
+          text: '&#9;\n'
+        }
       )
     }
   )
@@ -3999,9 +4034,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a character escape',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: 'a\\+b'}]}),
-        'a\\\\+b\n'
+        {
+          html: 'a\\\\+b\n',
+          text: 'a\\\\+b\n'
+        }
       )
     }
   )
@@ -4009,7 +4047,7 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a character escape of an autolink',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [
@@ -4021,7 +4059,10 @@ test('escape', { skip: true }, async function (t) {
             }
           ]
         }),
-        'a\\<https://a.b>\n'
+        {
+          html: 'a\\<https://a.b>\n',
+          text: 'a\\<https://a.b>\n'
+        }
       )
     }
   )
@@ -4029,12 +4070,15 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be code (flow)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: '```js\n```'}]
         }),
-        '```js\n```\n'
+        {
+          html: '```js\n```\n',
+          text: '```js\n```\n'
+        }
       )
     }
   )
@@ -4042,9 +4086,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a definition',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '[a]: b'}]}),
-        '[a]: b\n'
+        {
+          html: '[a]: b\n',
+          text: '[a]: b\n'
+        }
       )
     }
   )
@@ -4052,9 +4099,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be emphasis (asterisk)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '*a*'}]}),
-        '*a*\n'
+        {
+          html: '*a*\n',
+          text: '*a*\n'
+        }
       )
     }
   )
@@ -4062,9 +4112,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be emphasis (underscore)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '_a_'}]}),
-        '_a_\n'
+        {
+          html: '_a_\n',
+          text: '_a_\n'
+        }
       )
     }
   )
@@ -4072,9 +4125,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a heading (atx)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '# a'}]}),
-        '# a\n'
+        {
+          html: '# a\n',
+          text: '# a\n'
+        }
       )
     }
   )
@@ -4082,9 +4138,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a heading (setext, equals)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: 'a\n='}]}),
-        'a\n=\n'
+        {
+          html: 'a\n=\n',
+          text: 'a\n=\n'
+        }
       )
     }
   )
@@ -4092,29 +4151,38 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a heading (setext, dash)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: 'a\n-'}]}),
-        'a\n-\n'
+        {
+          html: 'a\n-\n',
+          text: 'a\n-\n'
+        }
       )
     }
   )
 
   await t.test('should escape what would otherwise be html', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'paragraph', children: [{type: 'text', value: '<a\nb>'}]}),
-      '<a\nb>\n'
+      {
+        html: '<a\nb>\n',
+        text: '<a\nb>\n'
+      }
     )
   })
 
   await t.test(
     'should escape what would otherwise be code (text)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: 'a `b`\n`c` d'}]
         }),
-        'a `b`\n`c` d\n'
+        {
+          html: 'a `b`\n`c` d\n',
+          text: 'a `b`\n`c` d\n'
+        }
       )
     }
   )
@@ -4122,7 +4190,7 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise turn a link into an image',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [
@@ -4134,7 +4202,10 @@ test('escape', { skip: true }, async function (t) {
             }
           ]
         }),
-        '![a](b)\n'
+        {
+          html: '![a](b)\n',
+          text: '![a](b)\n'
+        }
       )
     }
   )
@@ -4142,7 +4213,7 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise turn a link reference into an image reference',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [
@@ -4156,7 +4227,10 @@ test('escape', { skip: true }, async function (t) {
             }
           ]
         }),
-        '![a][b]\n'
+        {
+          html: '![a][b]\n',
+          text: '![a][b]\n'
+        }
       )
     }
   )
@@ -4164,9 +4238,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be an image (reference)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '![a][b]'}]}),
-        '![a][b]\n'
+        {
+          html: '![a][b]\n',
+          text: '![a][b]\n'
+        }
       )
     }
   )
@@ -4174,12 +4251,15 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be an image (resource)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: '![](a.jpg)'}]
         }),
-        '![](a.jpg)\n'
+        {
+          html: '![](a.jpg)\n',
+          text: '![](a.jpg)\n'
+        }
       )
     }
   )
@@ -4187,9 +4267,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a link (reference)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '[a][b]'}]}),
-        '[a][b]\n'
+        {
+          html: '[a][b]\n',
+          text: '[a][b]\n'
+        }
       )
     }
   )
@@ -4197,9 +4280,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a link (resource)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '[](a.jpg)'}]}),
-        '[](a.jpg)\n'
+        {
+          html: '[](a.jpg)\n',
+          text: '[](a.jpg)\n'
+        }
       )
     }
   )
@@ -4207,9 +4293,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should escape what would otherwise be a list item (plus)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '+ a\n+ b'}]}),
-        '+ a\n+ b\n'
+        {
+          html: '+ a\n+ b\n',
+          text: '+ a\n+ b\n'
+        }
       )
     }
   )
@@ -4217,9 +4306,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should not escape `+` when not followed by whitespace',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '+a'}]}),
-        '+a\n'
+        {
+          html: '+a\n',
+          text: '+a\n'
+        }
       )
     }
   )
@@ -4228,9 +4320,12 @@ test('escape', { skip: true }, async function (t) {
     'should escape what would otherwise be a list item (dash)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '- a\n- b'}]}),
-        '- a\n- b\n'
+        {
+          html: '- a\n- b\n',
+          text: '- a\n- b\n'
+        }
       )
     }
   )
@@ -4238,9 +4333,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should not escape `-` when not followed by whitespace',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '-a'}]}),
-        '-a\n'
+        {
+          html: '-a\n',
+          text: '-a\n'
+        }
       )
     }
   )
@@ -4249,9 +4347,12 @@ test('escape', { skip: true }, async function (t) {
     'should escape `-` when followed by another `-` (as it looks like a thematic break, setext underline)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '--a'}]}),
-        '--a\n'
+        {
+          html: '--a\n',
+          text: '--a\n'
+        }
       )
     }
   )
@@ -4262,14 +4363,17 @@ test('escape', { skip: true }, async function (t) {
     async function () {
       // Note: these are in titles, because the `*` case here is about flow nodes,
       // not phrasing (emphasis).
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'definition',
           identifier: 'x',
           url: 'y',
           title: 'a\n* b\n* c'
         }),
-        '[x]: y "a\n* b\n* c"\n'
+        {
+          html: '[x]: y "a\n* b\n* c"\n',
+          text: '[x]: y "a\n* b\n* c"\n'
+        }
       )
     }
   )
@@ -4277,9 +4381,12 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should not escape `*` when not followed by whitespace',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'definition', identifier: 'x', url: 'y', title: 'a\n*b'}),
-        '[x]: y "a\n*b"\n'
+        {
+          html: '[x]: y "a\n*b"\n',
+          text: '[x]: y "a\n*b"\n'
+        }
       )
     }
   )
@@ -4288,9 +4395,12 @@ test('escape', { skip: true }, async function (t) {
     'should escape `*` when followed by another `*` (as it looks like a thematic break)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'definition', identifier: 'x', url: 'y', title: 'a\n**b'}),
-        '[x]: y "a\n**b"\n'
+        {
+          html: '[x]: y "a\n**b"\n',
+          text: '[x]: y "a\n**b"\n'
+        }
       )
     }
   )
@@ -4299,12 +4409,15 @@ test('escape', { skip: true }, async function (t) {
     'should escape what would otherwise be a list item (dot)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: '1. a\n2. b'}]
         }),
-        '1. a\n2. b\n'
+        {
+          html: '1. a\n2. b\n',
+          text: '1. a\n2. b\n'
+        }
       )
     }
   )
@@ -4313,12 +4426,15 @@ test('escape', { skip: true }, async function (t) {
     'should escape what would otherwise be a list item (paren)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: '1) a\n2) b'}]
         }),
-        '1) a\n2) b\n'
+        {
+          html: '1) a\n2) b\n',
+          text: '1) a\n2) b\n'
+        }
       )
     }
   )
@@ -4326,18 +4442,21 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should not escape what can’t be a list (dot)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: '1.2.3. asd'}]
         }),
-        '1.2.3. asd\n'
+        {
+          html: '1.2.3. asd\n',
+          text: '1.2.3. asd\n'
+        }
       )
     }
   )
 
   await t.test('should support options in extensions', async function () {
-    assert.equal(
+    assert.deepEqual(
       to(
         {
           type: 'root',
@@ -4348,7 +4467,10 @@ test('escape', { skip: true }, async function (t) {
         },
         {extensions: [{tightDefinitions: true}]}
       ),
-      '[a]: <>\n[b]: <>\n'
+      {
+        html: '[a]: <>\n[b]: <>\n',
+        text: '[a]: <>\n[b]: <>\n'
+      }
     )
   })
 
@@ -4356,7 +4478,7 @@ test('escape', { skip: true }, async function (t) {
     'should support empty `join`, `handlers`, `extensions` in an extension (coverage)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'root',
@@ -4373,16 +4495,19 @@ test('escape', { skip: true }, async function (t) {
             ]
           }
         ),
-        '__&#x61;__\n'
+        {
+          html: '__&#x61;__\n',
+          text: '__&#x61;__\n'
+        }
       )
     }
   )
 
   await t.test(
     'should make `join` from options highest priority',
-    {skip: true},
+
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'root',
@@ -4440,7 +4565,10 @@ test('escape', { skip: true }, async function (t) {
             ]
           }
         ),
-        '1. foo\n   • bar\n'
+        {
+          html: '1. foo\n   • bar\n',
+          text: '1. foo\n   • bar\n'
+        }
       )
     }
   )
@@ -4448,7 +4576,7 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should prefer main options over extension options',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'root',
@@ -4456,7 +4584,10 @@ test('escape', { skip: true }, async function (t) {
           },
           {strong: '*', extensions: [{strong: '_'}]}
         ),
-        '**a**\n'
+        {
+          html: '**a**\n',
+          text: '**a**\n'
+        }
       )
     }
   )
@@ -4464,7 +4595,7 @@ test('escape', { skip: true }, async function (t) {
   await t.test(
     'should prefer extension options over subextension options',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'root',
@@ -4472,7 +4603,10 @@ test('escape', { skip: true }, async function (t) {
           },
           {extensions: [{strong: '*', extensions: [{strong: '_'}]}]}
         ),
-        '**a**\n'
+        {
+          html: '**a**\n',
+          text: '**a**\n'
+        }
       )
     }
   )
@@ -4481,7 +4615,7 @@ test('escape', { skip: true }, async function (t) {
     'should handle literal backslashes properly when before constructs (1)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [
@@ -4489,7 +4623,10 @@ test('escape', { skip: true }, async function (t) {
             {type: 'emphasis', children: [{type: 'text', value: 'a'}]}
           ]
         }),
-        '\\*a*\n'
+        {
+          html: '\\*a*\n',
+          text: '\\*a*\n'
+        }
       )
     }
   )
@@ -4498,7 +4635,7 @@ test('escape', { skip: true }, async function (t) {
     'should handle literal backslashes properly when before constructs (2)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [
@@ -4506,16 +4643,19 @@ test('escape', { skip: true }, async function (t) {
             {type: 'emphasis', children: [{type: 'text', value: 'a'}]}
           ]
         }),
-        '\\\\\\*a*\n'
+        {
+          html: '\\\\\\*a*\n',
+          text: '\\\\\\*a*\n'
+        }
       )
     }
   )
 })
 
-test('roundtrip', { skip: true }, async function (t) {
+test('roundtrip', {skip: true}, async function (t) {
   await t.test(
     'should roundtrip spread items in block quotes',
-    {skip: true},
+
     async function () {
       const value = [
         '> * Lorem ipsum dolor sit amet',
@@ -4530,7 +4670,7 @@ test('roundtrip', { skip: true }, async function (t) {
 
   await t.test(
     'should roundtrip spread items in sublists (1)',
-    {skip: true},
+
     async function () {
       const value = [
         '* Lorem ipsum dolor sit amet',
@@ -4547,7 +4687,7 @@ test('roundtrip', { skip: true }, async function (t) {
 
   await t.test(
     'should roundtrip spread items in sublists (2)',
-    {skip: true},
+
     async function () {
       const value = [
         '* 1. Lorem ipsum dolor sit amet',
@@ -4562,7 +4702,7 @@ test('roundtrip', { skip: true }, async function (t) {
 
   await t.test(
     'should roundtrip spread items in sublists (3)',
-    {skip: true},
+
     async function () {
       const value = [
         '* hello',
@@ -5009,12 +5149,12 @@ a _\\__ is this emphasis? _\\__`
         )
       )
 
-      assert.equal(to(from(value)), value)
+      assert.deepEqual(to(from(value)), value)
     }
   )
 })
 
-test('roundtrip attention', { skip: true }, async function (t) {
+test('roundtrip attention', {skip: true}, async function (t) {
   /**
    * @typedef Case
    * @property {string} inside
@@ -5104,9 +5244,9 @@ test('roundtrip attention', { skip: true }, async function (t) {
   }
 })
 
-test('position (output)', { skip: true }, async function (t) {
+test('position (output)', async function (t) {
   await t.test('should track output positions (1)', async function () {
-    assert.equal(
+    assert.deepEqual(
       to(
         {
           type: 'blockquote',
@@ -5134,12 +5274,15 @@ test('position (output)', { skip: true }, async function (t) {
           }
         }
       ),
-      '> a\n>\n> x\n'
+      {
+        html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a  x</blockquote>\n',
+        text: '> a\n>\n> x\n'
+      }
     )
   })
 
   await t.test('should track output positions (2)', async function () {
-    assert.equal(
+    assert.deepEqual(
       to(
         {
           type: 'blockquote',
@@ -5177,7 +5320,10 @@ test('position (output)', { skip: true }, async function (t) {
           }
         }
       ),
-      '> a\n> *b*\n'
+      {
+        html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a *b*</blockquote>\n',
+        text: '> a\n> *b*\n'
+      }
     )
   })
 })
