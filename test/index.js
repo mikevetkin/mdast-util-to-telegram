@@ -2619,61 +2619,77 @@ test('link', {skip: true}, async function (t) {
   )
 })
 
-test('linkReference', {skip: true}, async function (t) {
+test('linkReference', async function (t) {
   await t.test(
     'should support a link reference (nonsensical)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `children`, `referenceType`, `identifier` missing.
         to({type: 'linkReference'}),
-        '[][]\n'
+
+        {
+          html: '[][]\n',
+          text: '[][]\n'
+        }
       )
     }
   )
 
   await t.test('should support `children`', async function () {
-    assert.equal(
+    assert.deepEqual(
       // @ts-expect-error: check how the runtime handles `referenceType`, `identifier` missing.
       to({type: 'linkReference', children: [{type: 'text', value: 'a'}]}),
-      '[a][]\n'
+      {
+        html: '[a][]\n',
+        text: '[a][]\n'
+      }
     )
   })
 
   await t.test(
     'should support an `identifier` (nonsensical)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `referenceType` missing.
         to({type: 'linkReference', identifier: 'a', children: []}),
-        '[][a]\n'
+        {
+          html: '[][a]\n',
+          text: '[][a]\n'
+        }
       )
     }
   )
 
   await t.test('should support a `label` (nonsensical)', async function () {
-    assert.equal(
+    assert.deepEqual(
       // @ts-expect-error: check how the runtime handles `children`, `referenceType`, `identifier` missing.
       to({type: 'linkReference', label: 'a'}),
-      '[][a]\n'
+      {
+        html: '[][a]\n',
+        text: '[][a]\n'
+      }
     )
   })
 
   await t.test('should support `referenceType: "shortcut"`', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'linkReference',
         children: [{type: 'text', value: 'A'}],
         identifier: 'A',
         referenceType: 'shortcut'
       }),
-      '[A]\n'
+      {
+        html: '[A]\n',
+        text: '[A]\n'
+      }
     )
   })
 
   await t.test(
     'should support `referenceType: "collapsed"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'linkReference',
           children: [{type: 'text', value: 'A'}],
@@ -2681,7 +2697,10 @@ test('linkReference', {skip: true}, async function (t) {
           identifier: 'a',
           referenceType: 'collapsed'
         }),
-        '[A][]\n'
+        {
+          html: '[A][]\n',
+          text: '[A][]\n'
+        }
       )
     }
   )
@@ -2689,7 +2708,7 @@ test('linkReference', {skip: true}, async function (t) {
   await t.test(
     'should support `referenceType: "full"` (default)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'linkReference',
           children: [{type: 'text', value: 'A'}],
@@ -2697,13 +2716,16 @@ test('linkReference', {skip: true}, async function (t) {
           identifier: 'a',
           referenceType: 'full'
         }),
-        '[A][A]\n'
+        {
+          html: '[A][A]\n',
+          text: '[A][A]\n'
+        }
       )
     }
   )
 
   await t.test('should prefer label over identifier', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'linkReference',
         children: [{type: 'text', value: '&'}],
@@ -2711,26 +2733,32 @@ test('linkReference', {skip: true}, async function (t) {
         identifier: '&amp;',
         referenceType: 'full'
       }),
-      '[&][&]\n'
+      {
+        html: '[&][&]\n',
+        text: '[&][&]\n'
+      }
     )
   })
 
   await t.test('should decode `identifier` if w/o `label`', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'linkReference',
         children: [{type: 'text', value: '&'}],
         identifier: '&amp;',
         referenceType: 'full'
       }),
-      '[&][&]\n'
+      {
+        html: '[&][&]\n',
+        text: '[&][&]\n'
+      }
     )
   })
 
   await t.test(
     'should support incorrect character references 1 ',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [
@@ -2742,7 +2770,10 @@ test('linkReference', {skip: true}, async function (t) {
             }
           ]
         }),
-        '[&a;][&b;]\n'
+        {
+          html: '[&a;][&b;]\n',
+          text: '[&a;][&b;]\n'
+        }
       )
     }
   )
@@ -2750,14 +2781,17 @@ test('linkReference', {skip: true}, async function (t) {
   await t.test(
     'should not escape unneeded characters in a `reference`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'linkReference',
           identifier: 'a![b](c*d_e[f_g`h<i</j',
           referenceType: 'full',
           children: []
         }),
-        '[][a![b](c*d_e[f_g`h<i</j]\n'
+        {
+          html: '[][a![b](c*d_e[f_g`h<i</j]\n',
+          text: '[][a![b](c*d_e[f_g`h<i</j]\n'
+        }
       )
     }
   )
@@ -2765,14 +2799,17 @@ test('linkReference', {skip: true}, async function (t) {
   await t.test(
     'should unescape `identifier` if w/o `label`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'linkReference',
           children: [{type: 'text', value: '+'}],
           identifier: '\\+',
           referenceType: 'full'
         }),
-        '[+][+]\n'
+        {
+          html: '[+][+]\n',
+          text: '[+][+]\n'
+        }
       )
     }
   )
@@ -2780,7 +2817,7 @@ test('linkReference', {skip: true}, async function (t) {
   await t.test(
     'should use a collapsed reference if w/o `referenceType` and the label matches the reference',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `referenceType` missing.
         to({
           type: 'linkReference',
@@ -2788,7 +2825,10 @@ test('linkReference', {skip: true}, async function (t) {
           label: 'a',
           identifier: 'a'
         }),
-        '[a][]\n'
+        {
+          html: '[a][]\n',
+          text: '[a][]\n'
+        }
       )
     }
   )
@@ -2796,7 +2836,7 @@ test('linkReference', {skip: true}, async function (t) {
   await t.test(
     'should use a full reference if w/o `referenceType` and the label does not match the reference 2',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `referenceType` missing.
         to({
           type: 'linkReference',
@@ -2804,7 +2844,10 @@ test('linkReference', {skip: true}, async function (t) {
           label: 'b',
           identifier: 'b'
         }),
-        '[a][b]\n'
+        {
+          html: '[a][b]\n',
+          text: '[a][b]\n'
+        }
       )
     }
   )
@@ -2812,7 +2855,7 @@ test('linkReference', {skip: true}, async function (t) {
   await t.test(
     'should use a full reference if w/o `referenceType` and the label does not match the reference 3',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [
@@ -2825,32 +2868,37 @@ test('linkReference', {skip: true}, async function (t) {
             {type: 'text', value: '(b)'}
           ]
         }),
-        '[a][](b)\n'
+        {
+          html: '[a][](b)\n',
+          text: '[a][](b)\n'
+        }
       )
     }
   )
 })
 
-test('list', {skip: true}, async function (t) {
+test('list', async function (t) {
   await t.test('should support an empty list', async function () {
     // @ts-expect-error: check how the runtime handles `children` missing.
-    assert.equal(to({type: 'list'}), '')
+    assert.deepEqual(to({type: 'list'}), {
+      html: '',
+      text: ''
+    })
   })
 
-  await t.test(
-    'should support a list w/ an item',
-    {skip: true},
-    async function () {
-      assert.equal(
-        // @ts-expect-error: check how the runtime handles `children` in item missing.
-        to({type: 'list', children: [{type: 'listItem'}]}),
-        '*\n'
-      )
-    }
-  )
+  await t.test('should support a list w/ an item', async function () {
+    assert.deepEqual(
+      // @ts-expect-error: check how the runtime handles `children` in item missing.
+      to({type: 'list', children: [{type: 'listItem'}]}),
+      {
+        html: '•\n',
+        text: '•\n'
+      }
+    )
+  })
 
   await t.test('should support a list w/ items', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'list',
         children: [
@@ -2872,14 +2920,17 @@ test('list', {skip: true}, async function (t) {
           }
         ]
       }),
-      '• a\n\n• ***\n\n• b\n'
+      {
+        html: '• a\n\n• ***\n\n• b\n',
+        text: '• a\n\n• ***\n\n• b\n'
+      }
     )
   })
 
   await t.test(
     'should not use blank lines between items for lists w/ `spread: false`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'list',
           spread: false,
@@ -2896,7 +2947,10 @@ test('list', {skip: true}, async function (t) {
             }
           ]
         }),
-        '• a\n• ***\n'
+        {
+          html: '• a\n• ***\n',
+          text: '• a\n• ***\n'
+        }
       )
     }
   )
@@ -2904,7 +2958,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a list w/ `spread: false`, w/ a spread item',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'list',
           spread: false,
@@ -2922,7 +2976,10 @@ test('list', {skip: true}, async function (t) {
             }
           ]
         }),
-        '• a\n\n  b\n• ***\n'
+        {
+          html: '• a\n\n  b\n• ***\n',
+          text: '• a\n\n  b\n• ***\n'
+        }
       )
     }
   )
@@ -2930,19 +2987,22 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a list w/ `ordered` and an empty item',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'list',
           ordered: true,
           children: [{type: 'listItem', children: []}]
         }),
-        '1.\n'
+        {
+          html: '1.\n',
+          text: '1.\n'
+        }
       )
     }
   )
 
   await t.test('should support a list w/ `ordered`', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'list',
         ordered: true,
@@ -2965,14 +3025,17 @@ test('list', {skip: true}, async function (t) {
           }
         ]
       }),
-      '1. a\n\n2. ***\n\n3. b\n'
+      {
+        html: '1. a\n\n2. ***\n\n3. b\n',
+        text: '1. a\n\n2. ***\n\n3. b\n'
+      }
     )
   })
 
   await t.test(
     'should support a list w/ `ordered` and `spread: false`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'list',
           ordered: true,
@@ -2996,7 +3059,10 @@ test('list', {skip: true}, async function (t) {
             }
           ]
         }),
-        '1. a\n2. ***\n3. b\n'
+        {
+          html: '1. a\n2. ***\n3. b\n',
+          text: '1. a\n2. ***\n3. b\n'
+        }
       )
     }
   )
@@ -3004,7 +3070,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a list w/ `ordered` when `incrementListMarker: false`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3031,7 +3097,10 @@ test('list', {skip: true}, async function (t) {
           },
           {incrementListMarker: false}
         ),
-        '1. a\n1. ***\n1. b\n'
+        {
+          html: '1. a\n1. ***\n1. b\n',
+          text: '1. a\n1. ***\n1. b\n'
+        }
       )
     }
   )
@@ -3039,7 +3108,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a list w/ `ordered` and `start`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3060,7 +3129,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'one'}
         ),
-        '0. a\n\n1. ***\n'
+        {
+          html: '0. a\n\n1. ***\n',
+          text: '0. a\n\n1. ***\n'
+        }
       )
     }
   )
@@ -3068,7 +3140,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent `listItemIndent: "mixed"` and a tight list (1)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3090,7 +3162,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'mixed'}
         ),
-        '• a\n  b\n• c\n  d\n'
+        {
+          html: '• a\n  b\n• c\n  d\n',
+          text: '• a\n  b\n• c\n  d\n'
+        }
       )
     }
   )
@@ -3098,7 +3173,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent `listItemIndent: "mixed"` and a tight list (2)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3120,7 +3195,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'mixed'}
         ),
-        '•   a\n    b\n\n•   c\n    d\n'
+        {
+          html: '•   a\n    b\n\n•   c\n    d\n',
+          text: '•   a\n    b\n\n•   c\n    d\n'
+        }
       )
     }
   )
@@ -3128,7 +3206,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent for items 9 and 10 when `listItemIndent: "one"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3152,7 +3230,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'one'}
         ),
-        '9. a\n   b\n10. c\n    d\n'
+        {
+          html: '9. a\n   b\n10. c\n    d\n',
+          text: '9. a\n   b\n10. c\n    d\n'
+        }
       )
     }
   )
@@ -3160,7 +3241,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent for items 99 and 100 when `listItemIndent: "one"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3184,7 +3265,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'one'}
         ),
-        '99. a\n    b\n100. c\n     d\n'
+        {
+          html: '99. a\n    b\n100. c\n     d\n',
+          text: '99. a\n    b\n100. c\n     d\n'
+        }
       )
     }
   )
@@ -3192,7 +3276,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent for items 999 and 1000 when `listItemIndent: "one"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3216,7 +3300,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'one'}
         ),
-        '999. a\n     b\n1000. c\n      d\n'
+        {
+          html: '999. a\n     b\n1000. c\n      d\n',
+          text: '999. a\n     b\n1000. c\n      d\n'
+        }
       )
     }
   )
@@ -3224,7 +3311,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent for items 9 and 10 when `listItemIndent: "tab"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3248,7 +3335,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'tab'}
         ),
-        '9.  a\n    b\n10. c\n    d\n'
+        {
+          html: '9.  a\n    b\n10. c\n    d\n',
+          text: '9.  a\n    b\n10. c\n    d\n'
+        }
       )
     }
   )
@@ -3256,7 +3346,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent for items 99 and 100 when `listItemIndent: "tab"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3280,7 +3370,10 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'tab'}
         ),
-        '99. a\n    b\n100.    c\n        d\n'
+        {
+          html: '99. a\n    b\n100.    c\n        d\n',
+          text: '99. a\n    b\n100.    c\n        d\n'
+        }
       )
     }
   )
@@ -3288,7 +3381,7 @@ test('list', {skip: true}, async function (t) {
   await t.test(
     'should support a correct prefix and indent for items 999 and 1000 when `listItemIndent: "tab"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3312,23 +3405,36 @@ test('list', {skip: true}, async function (t) {
           },
           {listItemIndent: 'tab'}
         ),
-        '999.    a\n        b\n1000.   c\n        d\n'
+        {
+          html: '999.    a\n        b\n1000.   c\n        d\n',
+          text: '999.    a\n        b\n1000.   c\n        d\n'
+        }
       )
     }
   )
 })
 
-test('listItem', {skip: true}, async function (t) {
+test('listItem', async function (t) {
   await t.test('should support a list item', async function () {
     // @ts-expect-error: check how the runtime handles `children` missing.
-    assert.equal(to({type: 'listItem'}), '•\n')
+    assert.deepEqual(to({type: 'listItem'}), {
+      html: '•\n',
+      text: '•\n'
+    })
   })
 
   await t.test(
     'should serialize an item w/ a plus as bullet when `bullet: "+"`',
 
     async function () {
-      assert.equal(to({type: 'listItem', children: []}, {bullet: '+'}), '+\n')
+      assert.deepEqual(
+        to({type: 'listItem', children: []}, {bullet: '+'}),
+
+        {
+          html: '+\n',
+          text: '+\n'
+        }
+      )
     }
   )
 
@@ -3352,14 +3458,18 @@ test('listItem', {skip: true}, async function (t) {
     'should support a list item w/ a child',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'listItem',
           children: [
             {type: 'paragraph', children: [{type: 'text', value: 'a'}]}
           ]
         }),
-        '• a\n'
+
+        {
+          html: '• a\n',
+          text: '• a\n'
+        }
       )
     }
   )
@@ -3368,7 +3478,7 @@ test('listItem', {skip: true}, async function (t) {
     'should support a list item w/ children',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'listItem',
           children: [
@@ -3377,7 +3487,10 @@ test('listItem', {skip: true}, async function (t) {
             {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
           ]
         }),
-        '• a\n\n  ***\n\n  b\n'
+        {
+          html: '• a\n\n  ***\n\n  b\n',
+          text: '• a\n\n  ***\n\n  b\n'
+        }
       )
     }
   )
@@ -3386,7 +3499,7 @@ test('listItem', {skip: true}, async function (t) {
     'should use one space after the bullet for `listItemIndent: "one"`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'listItem',
@@ -3397,7 +3510,10 @@ test('listItem', {skip: true}, async function (t) {
           },
           {listItemIndent: 'one'}
         ),
-        '• a\n\n  ***\n'
+        {
+          html: '• a\n\n  ***\n',
+          text: '• a\n\n  ***\n'
+        }
       )
     }
   )
@@ -3406,7 +3522,7 @@ test('listItem', {skip: true}, async function (t) {
     'should use one space after the bullet for `listItemIndent: "mixed"`, when the item is not spread',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'listItem',
@@ -3416,7 +3532,11 @@ test('listItem', {skip: true}, async function (t) {
           },
           {listItemIndent: 'mixed'}
         ),
-        '• a\n'
+
+        {
+          html: '• a\n',
+          text: '• a\n'
+        }
       )
     }
   )
@@ -3425,7 +3545,7 @@ test('listItem', {skip: true}, async function (t) {
     'should use a tab stop of spaces after the bullet for `listItemIndent: "mixed"`, when the item is spread',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'listItem',
@@ -3437,7 +3557,10 @@ test('listItem', {skip: true}, async function (t) {
           },
           {listItemIndent: 'mixed'}
         ),
-        '•   a\n\n    ***\n'
+        {
+          html: '•   a\n\n    ***\n',
+          text: '•   a\n\n    ***\n'
+        }
       )
     }
   )
@@ -3462,7 +3585,7 @@ test('listItem', {skip: true}, async function (t) {
     'should not use blank lines between child blocks for items w/ `spread: false`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'listItem',
           spread: false,
@@ -3471,15 +3594,23 @@ test('listItem', {skip: true}, async function (t) {
             {type: 'thematicBreak'}
           ]
         }),
-        '• a\n  ***\n'
+
+        {
+          html: '• a\n  ***\n',
+          text: '• a\n  ***\n'
+        }
       )
     }
   )
 
   await t.test('should support `bulletOther`', async function () {
-    assert.equal(
+    assert.deepEqual(
       to(createList(createList(createList())), {bulletOther: '+'}),
-      '• • •\n'
+
+      {
+        html: '• • •\n',
+        text: '• • •\n'
+      }
     )
   })
 
@@ -3487,9 +3618,13 @@ test('listItem', {skip: true}, async function (t) {
     'should default to an `bulletOther` different from `bullet` (1)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(createList(createList(createList())), {bullet: '-'}),
-        '- - •\n'
+
+        {
+          html: '- - •\n',
+          text: '- - •\n'
+        }
       )
     }
   )
@@ -3498,9 +3633,13 @@ test('listItem', {skip: true}, async function (t) {
     'should default to an `bulletOther` different from `bullet` (2)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(createList(createList(createList())), {bullet: '*'}),
-        '* * -\n'
+
+        {
+          html: '* * -\n',
+          text: '* * -\n'
+        }
       )
     }
   )
@@ -3519,7 +3658,7 @@ test('listItem', {skip: true}, async function (t) {
   )
 
   await t.test(
-    'should throw when an `bulletOther` is given equal to `bullet`',
+    'should throw when an `bulletOther` is given deepEqual to `bullet`',
 
     async function () {
       assert.throws(function () {
@@ -3535,12 +3674,15 @@ test('listItem', {skip: true}, async function (t) {
     'should use a different bullet than a thematic rule marker, if the first child of a list item is a thematic break (1)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'list',
           children: [{type: 'listItem', children: [{type: 'thematicBreak'}]}]
         }),
-        '• ***\n'
+        {
+          html: '• ***\n',
+          text: '• ***\n'
+        }
       )
     }
   )
@@ -3549,7 +3691,7 @@ test('listItem', {skip: true}, async function (t) {
     'should use a different bullet than a thematic rule marker, if the first child of a list item is a thematic break (2)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'list',
           children: [
@@ -3562,7 +3704,10 @@ test('listItem', {skip: true}, async function (t) {
             {type: 'listItem', children: [{type: 'thematicBreak'}]}
           ]
         }),
-        '• a\n\n• ***\n'
+        {
+          html: '• a\n\n• ***\n',
+          text: '• a\n\n• ***\n'
+        }
       )
     }
   )
@@ -3571,7 +3716,10 @@ test('listItem', {skip: true}, async function (t) {
     'should *not* use a different bullet for an empty list item in two lists',
 
     async function () {
-      assert.equal(to(createList(createList())), '• •\n')
+      assert.deepEqual(to(createList(createList())), {
+        html: '• •\n',
+        text: '• •\n'
+      })
     }
   )
 
@@ -3579,7 +3727,10 @@ test('listItem', {skip: true}, async function (t) {
     'should use a different bullet for an empty list item in three lists (1)',
 
     async function () {
-      assert.equal(to(createList(createList(createList()))), '• • •\n')
+      assert.deepEqual(to(createList(createList(createList()))), {
+        html: '• • •\n',
+        text: '• • •\n'
+      })
     }
   )
 
@@ -3587,7 +3738,7 @@ test('listItem', {skip: true}, async function (t) {
     'should use a different bullet for an empty list item in three lists (2)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'list',
           children: [
@@ -3595,7 +3746,10 @@ test('listItem', {skip: true}, async function (t) {
             {type: 'listItem', children: [createList(createList())]}
           ]
         }),
-        '•\n\n• • •\n'
+        {
+          html: '•\n\n• • •\n',
+          text: '•\n\n• • •\n'
+        }
       )
     }
   )
@@ -3604,9 +3758,12 @@ test('listItem', {skip: true}, async function (t) {
     'should not use a different bullet for an empty list item in three lists if `bullet` isn’t a thematic rule marker',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(createList(createList(createList())), {bullet: '+'}),
-        '+ + +\n'
+        {
+          html: '+ + +\n',
+          text: '+ + +\n'
+        }
       )
     }
   )
@@ -3615,10 +3772,10 @@ test('listItem', {skip: true}, async function (t) {
     'should use a different bullet for an empty list item in four lists',
 
     async function () {
-      assert.equal(
-        to(createList(createList(createList(createList())))),
-        '• • • •\n'
-      )
+      assert.deepEqual(to(createList(createList(createList(createList())))), {
+        html: '• • • •\n',
+        text: '• • • •\n'
+      })
     }
   )
 
@@ -3626,9 +3783,12 @@ test('listItem', {skip: true}, async function (t) {
     'should use a different bullet for an empty list item in five lists',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(createList(createList(createList(createList(createList()))))),
-        '• • • • •\n'
+        {
+          html: '• • • • •\n',
+          text: '• • • • •\n'
+        }
       )
     }
   )
@@ -3637,7 +3797,7 @@ test('listItem', {skip: true}, async function (t) {
     'should not use a different bullet for an empty list item at non-head in two lists',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           createList(
             createList([
@@ -3649,7 +3809,10 @@ test('listItem', {skip: true}, async function (t) {
             ])
           )
         ),
-        '• • • a\n\n    •\n'
+        {
+          html: '• • • a\n\n    •\n',
+          text: '• • • a\n\n    •\n'
+        }
       )
     }
   )
@@ -3658,7 +3821,7 @@ test('listItem', {skip: true}, async function (t) {
     'should support `bulletOrdered`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'list',
@@ -3667,7 +3830,10 @@ test('listItem', {skip: true}, async function (t) {
           },
           {bulletOrdered: ')'}
         ),
-        '1)\n'
+        {
+          html: '1)\n',
+          text: '1)\n'
+        }
       )
     }
   )
@@ -3696,7 +3862,7 @@ test('listItem', {skip: true}, async function (t) {
     'should use a different bullet for adjacent ordered lists',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'root',
@@ -3715,34 +3881,48 @@ test('listItem', {skip: true}, async function (t) {
           },
           {bulletOrdered: ')'}
         ),
-        '1)\n\n1.\n'
+        {
+          html: '1)\n\n1.\n',
+          text: '1)\n\n1.\n'
+        }
       )
     }
   )
 })
 
-test('paragraph', {skip: true}, async function (t) {
+test('paragraph', async function (t) {
   await t.test('should support an empty paragraph', async function () {
-    assert.equal(
+    assert.deepEqual(
       // @ts-expect-error: check how the runtime handles `children` missing.
       to({type: 'paragraph'}),
-      ''
+      {
+        html: '',
+        text: ''
+      }
     )
   })
 
   await t.test('should support a paragraph', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'paragraph', children: [{type: 'text', value: 'a\nb'}]}),
-      'a\nb\n'
+
+      {
+        html: 'a\nb\n',
+        text: 'a\nb\n'
+      }
     )
   })
 
   await t.test(
     'should encode spaces at the start of paragraphs',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '  a'}]}),
-        '  a\n'
+
+        {
+          html: '  a\n',
+          text: '  a\n'
+        }
       )
     }
   )
@@ -3750,9 +3930,13 @@ test('paragraph', {skip: true}, async function (t) {
   await t.test(
     'should encode spaces at the end of paragraphs',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: 'a  '}]}),
-        'a  \n'
+
+        {
+          html: 'a  \n',
+          text: 'a  \n'
+        }
       )
     }
   )
@@ -3760,9 +3944,13 @@ test('paragraph', {skip: true}, async function (t) {
   await t.test(
     'should encode tabs at the start of paragraphs',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: '\t\ta'}]}),
-        '\t\ta\n'
+
+        {
+          html: '\t\ta\n',
+          text: '\t\ta\n'
+        }
       )
     }
   )
@@ -3770,32 +3958,41 @@ test('paragraph', {skip: true}, async function (t) {
   await t.test(
     'should encode tabs at the end of paragraphs',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: 'a\t\t'}]}),
-        'a\t\t\n'
+        {
+          html: 'a\t\t\n',
+          text: 'a\t\t\n'
+        }
       )
     }
   )
 
   await t.test(
-    'should encode spaces around line endings in paragraphs',
+    'should encode spaces around line endings in paragraphs (1)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'paragraph', children: [{type: 'text', value: 'a  \n  b'}]}),
-        'a  \n  b\n'
+        {
+          html: 'a  \n  b\n',
+          text: 'a  \n  b\n'
+        }
       )
     }
   )
 
   await t.test(
-    'should encode spaces around line endings in paragraphs',
+    'should encode spaces around line endings in paragraphs (2)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'paragraph',
           children: [{type: 'text', value: 'a\t\t\n\t\tb'}]
         }),
-        'a\t\t\n\t\tb\n'
+        {
+          html: 'a\t\t\n\t\tb\n',
+          text: 'a\t\t\n\t\tb\n'
+        }
       )
     }
   )
@@ -4702,7 +4899,7 @@ test('roundtrip', {skip: true}, async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(value)), value)
+      assert.deepEqual(to(from(value)), value)
     }
   )
 
@@ -4719,7 +4916,7 @@ test('roundtrip', {skip: true}, async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(value)), value)
+      assert.deepEqual(to(from(value)), value)
     }
   )
 
@@ -4734,7 +4931,7 @@ test('roundtrip', {skip: true}, async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(value)), value)
+      assert.deepEqual(to(from(value)), value)
     }
   )
 
@@ -4755,7 +4952,7 @@ test('roundtrip', {skip: true}, async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(value)), value)
+      assert.deepEqual(to(from(value)), value)
     }
   )
 
@@ -4764,7 +4961,7 @@ test('roundtrip', {skip: true}, async function (t) {
     async function () {
       const value = 'An autolink: <http://example.com/?foo=1&bar=2>.\n'
 
-      assert.equal(to(from(value)), value)
+      assert.deepEqual(to(from(value)), value)
     }
   )
 
@@ -4782,7 +4979,7 @@ test('roundtrip', {skip: true}, async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(value)), value)
+      assert.deepEqual(to(from(value)), value)
     }
   )
 
@@ -4802,13 +4999,13 @@ test('roundtrip', {skip: true}, async function (t) {
       ''
     ].join('\n')
 
-    assert.equal(to(from(value)), value)
+    assert.deepEqual(to(from(value)), value)
   })
 
   await t.test('should roundtrip empty lists', async function () {
     const value = '• a\n\n<!---->\n\n• b\n'
 
-    assert.equal(to(from(value)), value)
+    assert.deepEqual(to(from(value)), value)
   })
 
   await t.test(
@@ -4829,35 +5026,35 @@ test('roundtrip', {skip: true}, async function (t) {
         ''
       ].join('\n')
 
-      assert.equal(to(from(value), {fences: false}), value)
+      assert.deepEqual(to(from(value), {fences: false}), value)
     }
   )
 
   await t.test('should roundtrip adjacent block quotes', async function () {
     const value = '> a\n\n> b\n'
 
-    assert.equal(to(from(value)), value)
+    assert.deepEqual(to(from(value)), value)
   })
 
   await t.test('should roundtrip formatted URLs', async function () {
     const value = '[**https://unifiedjs.com/**](https://unifiedjs.com/)\n'
 
-    assert.equal(to(from(value)), value)
+    assert.deepEqual(to(from(value)), value)
   })
 
   await t.test('should roundtrip backslashes (1)', async function () {
     const step1 = '\\ \\\\ \\\\\\ \\\\\\\\'
     const step2 = '\\ \\ \\\\\\ \\\\\\\n'
 
-    assert.equal(to(from(step1)), step2)
+    assert.deepEqual(to(from(step1)), step2)
 
-    assert.equal(to(from(step2)), step2)
+    assert.deepEqual(to(from(step2)), step2)
   })
 
   await t.test('should not collapse escapes (1)', async function () {
     const value = '\\\\*a\n'
 
-    assert.equal(to(from(value)), value)
+    assert.deepEqual(to(from(value)), value)
   })
 
   await t.test('should not collapse escapes (2)', async function () {
