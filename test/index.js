@@ -3801,15 +3801,18 @@ test('paragraph', {skip: true}, async function (t) {
   )
 })
 
-test('strong', {skip: true}, async function (t) {
+test('strong', async function (t) {
   await t.test(
     'should support an empty strong',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `children` missing.
         to({type: 'strong'}),
-        '****\n'
+        {
+          html: '****\n',
+          text: '****\n'
+        }
       )
     }
   )
@@ -3830,29 +3833,37 @@ test('strong', {skip: true}, async function (t) {
   )
 
   await t.test('should support a strong w/ children', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'strong', children: [{type: 'text', value: 'a'}]}),
-      '**a**\n'
+
+      {
+        html: '**a**\n',
+        text: '**a**\n'
+      }
     )
   })
 
   await t.test(
     'should support a strong w/ underscores when `emphasis: "_"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {type: 'strong', children: [{type: 'text', value: 'a'}]},
           {strong: '_'}
         ),
-        '__a__\n'
+
+        {
+          html: '__a__\n',
+          text: '__a__\n'
+        }
       )
     }
   )
 })
 
-test('text', {skip: true}, async function (t) {
+test('text', async function (t) {
   await t.test('should not be first slash', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'paragraph',
         children: [
@@ -3862,39 +3873,60 @@ test('text', {skip: true}, async function (t) {
           }
         ]
       }),
-      '00 Свойства - знание \n'
+      {
+        html: '00 Свойства - знание \n',
+        text: '00 Свойства - знание \n'
+      }
     )
   })
   await t.test('should support a void text', async function () {
     // @ts-expect-error: check how the runtime handles `value` missing.
-    assert.equal(to({type: 'text'}), '')
+    assert.deepEqual(to({type: 'text'}), {
+      html: '',
+      text: ''
+    })
   })
 
   await t.test('should support an empty text', async function () {
-    assert.equal(to({type: 'text', value: ''}), '')
+    assert.deepEqual(to({type: 'text', value: ''}), {
+      html: '',
+      text: ''
+    })
   })
 
   await t.test('should support text', async function () {
-    assert.equal(to({type: 'text', value: 'a\nb'}), 'a\nb\n')
+    assert.deepEqual(to({type: 'text', value: 'a\nb'}), {
+      html: 'a\nb\n',
+      text: 'a\nb\n'
+    })
   })
 })
 
-test('thematic break', {skip: true}, async function (t) {
+test('thematic break', async function (t) {
   await t.test('should support a thematic break', async function () {
-    assert.equal(to({type: 'thematicBreak'}), '***\n')
+    assert.deepEqual(to({type: 'thematicBreak'}), {
+      html: '***\n',
+      text: '***\n'
+    })
   })
 
   await t.test(
     'should support a thematic break w/ dashes when `rule: "-"`',
     async function () {
-      assert.equal(to({type: 'thematicBreak'}, {rule: '-'}), '---\n')
+      assert.deepEqual(to({type: 'thematicBreak'}, {rule: '-'}), {
+        html: '---\n',
+        text: '---\n'
+      })
     }
   )
 
   await t.test(
     'should support a thematic break w/ underscores when `rule: "_"`',
     async function () {
-      assert.equal(to({type: 'thematicBreak'}, {rule: '_'}), '___\n')
+      assert.deepEqual(to({type: 'thematicBreak'}, {rule: '_'}), {
+        html: '___\n',
+        text: '___\n'
+      })
     }
   )
 
@@ -3916,7 +3948,10 @@ test('thematic break', {skip: true}, async function (t) {
   await t.test(
     'should support a thematic break w/ more repetitions w/ `ruleRepetition`',
     async function () {
-      assert.equal(to({type: 'thematicBreak'}, {ruleRepetition: 5}), '*****\n')
+      assert.deepEqual(to({type: 'thematicBreak'}, {ruleRepetition: 5}), {
+        html: '*****\n',
+        text: '*****\n'
+      })
     }
   )
 
@@ -3932,7 +3967,10 @@ test('thematic break', {skip: true}, async function (t) {
   await t.test(
     'should support a thematic break w/ spaces w/ `ruleSpaces`',
     async function () {
-      assert.equal(to({type: 'thematicBreak'}, {ruleSpaces: true}), '* * *\n')
+      assert.deepEqual(to({type: 'thematicBreak'}, {ruleSpaces: true}), {
+        html: '* * *\n',
+        text: '* * *\n'
+      })
     }
   )
 })
