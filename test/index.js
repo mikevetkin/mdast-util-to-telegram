@@ -4887,10 +4887,9 @@ test('escape', async function (t) {
   )
 })
 
-test('roundtrip', {skip: true}, async function (t) {
+test('roundtrip', { only: true }, async function (t) {
   await t.test(
     'should roundtrip spread items in block quotes',
-
     async function () {
       const value = [
         '> * Lorem ipsum dolor sit amet',
@@ -4899,7 +4898,10 @@ test('roundtrip', {skip: true}, async function (t) {
         ''
       ].join('\n')
 
-      assert.deepEqual(to(from(value)), value)
+      assert.deepEqual(to(from(value)), {
+        text: '> • Lorem ipsum dolor sit amet\n>\n> • consectetur adipisicing elit\n',
+        html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">• Lorem ipsum dolor sit amet  • consectetur adipisicing elit</blockquote>\n'
+      })
     }
   )
 
