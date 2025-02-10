@@ -4907,7 +4907,6 @@ test('roundtrip', { only: true }, async function (t) {
 
   await t.test(
     'should roundtrip spread items in sublists (1)',
-
     async function () {
       const value = [
         '* Lorem ipsum dolor sit amet',
@@ -4918,7 +4917,20 @@ test('roundtrip', { only: true }, async function (t) {
         ''
       ].join('\n')
 
-      assert.deepEqual(to(from(value)), value)
+      assert.deepEqual(to(from(value)),
+      {
+        html: '• Lorem ipsum dolor sit amet\n' +
+        '\n' +
+        '  1. consectetur adipisicing elit\n' +
+        '\n' +
+        '  2. sed do eiusmod tempor incididunt\n',
+        text: '• Lorem ipsum dolor sit amet\n' +
+        '\n' +
+        '  1. consectetur adipisicing elit\n' +
+        '\n' +
+        '  2. sed do eiusmod tempor incididunt\n'
+ }
+    )
     }
   )
 
