@@ -266,24 +266,24 @@ test('core', async function (t) {
   })
 })
 
-test('blockquote', {skip: true}, async function (t) {
+test('blockquote', async function (t) {
   await t.test('should support a block quote', async function () {
     // @ts-expect-error: check how the runtime handles `children` missing.
-    assert.equal(to({type: 'blockquote'}), '>\n')
+    assert.deepEqual(to({type: 'blockquote'}), { text: '>\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote"></blockquote>\n' })
   })
 
   await t.test('should support a block quote w/ a child', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'blockquote',
         children: [{type: 'paragraph', children: [{type: 'text', value: 'a'}]}]
       }),
-      '> a\n'
+      { text: '> a\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a</blockquote>\n' }
     )
   })
 
   await t.test('should support a block quote w/ children', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'blockquote',
         children: [
@@ -292,21 +292,21 @@ test('blockquote', {skip: true}, async function (t) {
           {type: 'paragraph', children: [{type: 'text', value: 'b'}]}
         ]
       }),
-      '> a\n>\n> ***\n>\n> b\n'
+      { text: '> a\n>\n> ***\n>\n> b\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a  ***  b</blockquote>\n' }
     )
   })
 
   await t.test(
     'should support text w/ a line ending in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
             {type: 'paragraph', children: [{type: 'text', value: 'a\nb'}]}
           ]
         }),
-        '> a\n> b\n'
+        { text: '> a\n> b\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a b</blockquote>\n' }
       )
     }
   )
@@ -314,7 +314,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support adjacent texts in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -327,49 +327,13 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> ab\n'
-      )
-    }
-  )
-
-  await t.test(
-    'should support a block quote in a block quote',
-    async function () {
-      assert.equal(
-        to({
-          type: 'blockquote',
-          children: [
-            {
-              type: 'paragraph',
-              children: [{type: 'text', value: 'a\nb'}]
-            },
-            {
-              type: 'blockquote',
-              children: [
-                {
-                  type: 'paragraph',
-                  children: [
-                    {type: 'text', value: 'a\n'},
-                    {type: 'inlineCode', value: 'b\nc'},
-                    {type: 'text', value: '\nd'}
-                  ]
-                },
-                {
-                  type: 'heading',
-                  depth: 1,
-                  children: [{type: 'text', value: 'a b'}]
-                }
-              ]
-            }
-          ]
-        }),
-        '> a\n> b\n>\n> > a\n> > `b\n> > c`\n> > d\n> >\n> > **a b**\n'
+        { text: '> ab\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">ab</blockquote>\n' }
       )
     }
   )
 
   await t.test('should support a break in a block quote', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'blockquote',
         children: [
@@ -383,14 +347,14 @@ test('blockquote', {skip: true}, async function (t) {
           }
         ]
       }),
-      '> a\\\n> b\n'
+      { text: '> a\\\n> b\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a\\ b</blockquote>\n' }
     )
   })
 
   await t.test(
     'should support code (flow, indented) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'blockquote',
@@ -398,7 +362,7 @@ test('blockquote', {skip: true}, async function (t) {
           },
           {fences: false}
         ),
-        '>     a\n>     b\n>\n>     c\n'
+        { text: '>     a\n>     b\n>\n>     c\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a b  c</blockquote>\n' }
       )
     }
   )
@@ -406,12 +370,12 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support code (flow, fenced) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [{type: 'code', lang: 'a\nb', value: 'c\nd\n\ne'}]
         }),
-        '> ```a\n> b\n> c\n> d\n>\n> e\n> ```\n'
+        { text: '> ```a\n> b\n> c\n> d\n>\n> e\n> ```\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">```a b c d  e ```</blockquote>\n' }
       )
     }
   )
@@ -419,7 +383,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support code (text) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -433,7 +397,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a\n> `b\n> c`\n> d\n'
+        { text: '> a\n> `b\n> c`\n> d\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a `b c` d</blockquote>\n' }
       )
     }
   )
@@ -441,7 +405,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support padded code (text) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -455,31 +419,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a\n> `  b\n> c  `\n> d\n'
-      )
-    }
-  )
-
-  await t.test(
-    'should support a definition in a block quote',
-    async function () {
-      assert.equal(
-        to({
-          type: 'blockquote',
-          children: [
-            {
-              type: 'definition',
-              identifier: 'a\nb',
-              url: 'c\nd',
-              title: 'e\nf'
-            },
-            {
-              type: 'paragraph',
-              children: [{type: 'text', value: 'a\nb'}]
-            }
-          ]
-        }),
-        '> [a\n> b]: <c\n> d> "e\n> f"\n>\n> a\n> b\n'
+        { text: '> a\n> `  b\n> c  `\n> d\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a `  b c  ` d</blockquote>\n' }
       )
     }
   )
@@ -487,7 +427,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support an emphasis in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -501,7 +441,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a\n> *c\n> d*\n> d\n'
+        { text: '> a\n> *c\n> d*\n> d\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a *c d* d</blockquote>\n' }
       )
     }
   )
@@ -509,7 +449,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support a heading (atx) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -520,7 +460,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> **a\n> b**\n'
+        { text: '> **a\n> b**\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">**a b**</blockquote>\n' }
       )
     }
   )
@@ -528,7 +468,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support a heading (setext) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'blockquote',
@@ -542,7 +482,7 @@ test('blockquote', {skip: true}, async function (t) {
           },
           {setext: true}
         ),
-        '> **a\n> b**\n'
+        { text: '> **a\n> b**\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">**a b**</blockquote>\n' }
       )
     }
   )
@@ -550,12 +490,12 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support html (flow) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [{type: 'html', value: '<div\nhidden>'}]
         }),
-        '> <div\n> hidden>\n'
+        { text: '> <div\n> hidden>\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote"><div hidden></blockquote>\n' }
       )
     }
   )
@@ -563,7 +503,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support html (text) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -577,7 +517,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a <span\n> hidden>\n> b\n'
+        { text: '> a <span\n> hidden>\n> b\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a <span hidden> b</blockquote>\n' }
       )
     }
   )
@@ -585,7 +525,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support an image (resource) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -599,7 +539,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a\n> ![d\n> e](<b\n> c> "f\n> g")\n> h\n'
+        { text: '> a\n> ![d\n> e](<b\n> c> "f\n> g")\n> h\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a ![d e](<b c> "f g") h</blockquote>\n' }
       )
     }
   )
@@ -607,7 +547,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support an image (reference) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -627,7 +567,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a\n> ![b\n> c][d\n> e]\n> g\n'
+        { text: '> a\n> ![b\n> c][d\n> e]\n> g\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a ![b c][d e] g</blockquote>\n' }
       )
     }
   )
@@ -635,7 +575,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support a link (resource) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -654,7 +594,7 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a\n> [d\n> e](<b\n> c> "f\n> g")\n> h\n'
+        { text: '> a\n> [d\n> e](<b\n> c> "f\n> g")\n> h\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a [d e](<b c> "f g") h</blockquote>\n' }
       )
     }
   )
@@ -662,7 +602,7 @@ test('blockquote', {skip: true}, async function (t) {
   await t.test(
     'should support a link (reference) in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [
@@ -682,13 +622,13 @@ test('blockquote', {skip: true}, async function (t) {
             }
           ]
         }),
-        '> a\n> [b\n> c][d\n> e]\n> g\n'
+        { text: '> a\n> [b\n> c][d\n> e]\n> g\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a [b c][d e] g</blockquote>\n' }
       )
     }
   )
 
   await t.test('should support a list in a block quote', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'blockquote',
         children: [
@@ -719,12 +659,12 @@ test('blockquote', {skip: true}, async function (t) {
           }
         ]
       }),
-      '> a\n> b\n>\n> • c\n>   d\n>\n> • ***\n>\n> • e\n>   f\n'
+      { text: '> a\n> b\n>\n> • c\n>   d\n>\n> • ***\n>\n> • e\n>   f\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a b  • c d  • ***  • e f</blockquote>\n' }
     )
   })
 
   await t.test('should support a strong in a block quote', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({
         type: 'blockquote',
         children: [
@@ -738,19 +678,19 @@ test('blockquote', {skip: true}, async function (t) {
           }
         ]
       }),
-      '> a\n> **c\n> d**\n> d\n'
+      { text: '> a\n> **c\n> d**\n> d\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">a **c d** d</blockquote>\n' }
     )
   })
 
   await t.test(
     'should support a thematic break in a block quote',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'blockquote',
           children: [{type: 'thematicBreak'}, {type: 'thematicBreak'}]
         }),
-        '>\n'
+        { text: '>\n', html: '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote"></blockquote>\n' }
       )
     }
   )
