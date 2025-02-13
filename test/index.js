@@ -745,10 +745,10 @@ test('break', async function (t) {
   )
 })
 
-test('code (flow)', {skip: true}, async function (t) {
+test('code (flow)', async function (t) {
   await t.test('should support empty code', async function () {
     // @ts-expect-error: check how the runtime handles `value` missing.
-    assert.equal(to({type: 'code'}), '```\n```\n')
+    assert.deepEqual(to({type: 'code'}), { text: '```\n```\n', html: '```\n```\n' })
   })
 
   await t.test(
@@ -766,7 +766,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should support code w/ a value (indent)',
 
     async function () {
-      assert.equal(to({type: 'code', value: 'a'}, {fences: false}), '    a\n')
+      assert.deepEqual(to({type: 'code', value: 'a'}, {fences: false}), { text: '    a\n', html: '    a\n' })
     }
   )
 
@@ -774,7 +774,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should support code w/ a value (fences)',
 
     async function () {
-      assert.equal(to({type: 'code', value: 'a'}), '```\na\n```\n')
+      assert.deepEqual(to({type: 'code', value: 'a'}), { text: '```\na\n```\n', html: '```\na\n```\n' })
     }
   )
 
@@ -782,7 +782,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should support code w/ a lang',
 
     async function () {
-      assert.equal(to({type: 'code', lang: 'a', value: ''}), '```a\n```\n')
+      assert.deepEqual(to({type: 'code', lang: 'a', value: ''}), { text: '```a\n```\n', html: '```a\n```\n' })
     }
   )
 
@@ -790,7 +790,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should support (ignore) code w/ only a meta',
 
     async function () {
-      assert.equal(to({type: 'code', meta: 'a', value: ''}), '```\n```\n')
+      assert.deepEqual(to({type: 'code', meta: 'a', value: ''}), { text: '```\n```\n', html: '```\n```\n' })
     }
   )
 
@@ -798,9 +798,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should support code w/ lang and meta',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'a', meta: 'b', value: ''}),
-        '```a\n```\n'
+        { text: '```a\n```\n', html: '```a\n```\n' }
       )
     }
   )
@@ -809,7 +809,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should encode a space in `lang`',
 
     async function () {
-      assert.equal(to({type: 'code', lang: 'a b', value: ''}), '```a b\n```\n')
+      assert.deepEqual(to({type: 'code', lang: 'a b', value: ''}), { text: '```a b\n```\n', html: '```a b\n```\n' })
     }
   )
 
@@ -817,9 +817,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should encode a line ending in `lang`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'a\nb', value: ''}),
-        '```a\nb\n```\n'
+        { text: '```a\nb\n```\n', html: '```a\nb\n```\n' }
       )
     }
   )
@@ -828,7 +828,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should encode a grave accent in `lang`',
 
     async function () {
-      assert.equal(to({type: 'code', lang: 'a`b', value: ''}), '```a`b\n```\n')
+      assert.deepEqual(to({type: 'code', lang: 'a`b', value: ''}), { text: '```a`b\n```\n', html: '```a`b\n```\n' })
     }
   )
 
@@ -836,9 +836,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should escape a backslash in `lang`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'a\\-b', value: ''}),
-        '```a\\\\-b\n```\n'
+        { text: '```a\\\\-b\n```\n', html: '```a\\\\-b\n```\n' }
       )
     }
   )
@@ -847,9 +847,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should not encode a space in `meta`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'x', meta: 'a b', value: ''}),
-        '```x\n```\n'
+        { text: '```x\n```\n', html: '```x\n```\n' }
       )
     }
   )
@@ -858,9 +858,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should encode a line ending in `meta`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'x', meta: 'a\nb', value: ''}),
-        '```x\n```\n'
+        { text: '```x\n```\n', html: '```x\n```\n' }
       )
     }
   )
@@ -869,9 +869,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should encode a grave accent in `meta`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'x', meta: 'a`b', value: ''}),
-        '```x\n```\n'
+        { text: '```x\n```\n', html: '```x\n```\n' }
       )
     }
   )
@@ -880,9 +880,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should escape a backslash in `meta`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'x', meta: 'a\\-b', value: ''}),
-        '```x\n```\n'
+        { text: '```x\n```\n', html: '```x\n```\n' }
       )
     }
   )
@@ -891,7 +891,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should support fenced code w/ tildes when `fence: "~"`',
 
     async function () {
-      assert.equal(to({type: 'code', value: ''}, {fence: '~'}), '~~~\n~~~\n')
+      assert.deepEqual(to({type: 'code', value: ''}, {fence: '~'}), { text: '~~~\n~~~\n', html: '~~~\n~~~\n' })
     }
   )
 
@@ -899,9 +899,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should not encode a grave accent when using tildes for fences',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', lang: 'a`b', value: ''}, {fence: '~'}),
-        '~~~a`b\n~~~\n'
+        { text: '~~~a`b\n~~~\n', html: '~~~a`b\n~~~\n' }
       )
     }
   )
@@ -910,9 +910,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'NEED DISCUSSION - should use more grave accents for fences if there are streaks of grave accents in the value (fences)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', value: '```\nasd\n```'}),
-        '````\n```\nasd\n```\n````\n'
+        { text: '````\n```\nasd\n```\n````\n', html: '````\n```\nasd\n```\n````\n' }
       )
     }
   )
@@ -921,9 +921,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'NEED DISCUSSION - should use more tildes for fences if there are streaks of tildes in the value (fences)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', value: '~~~\nasd\n~~~'}, {fence: '~'}),
-        '~~~~\n~~~\nasd\n~~~\n~~~~\n'
+        { text: '~~~~\n~~~\nasd\n~~~\n~~~~\n', html: '~~~~\n~~~\nasd\n~~~\n~~~~\n' }
       )
     }
   )
@@ -932,7 +932,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should use a fence if there is an info',
 
     async function () {
-      assert.equal(to({type: 'code', lang: 'a', value: 'b'}), '```a\nb\n```\n')
+      assert.deepEqual(to({type: 'code', lang: 'a', value: 'b'}), { text: '```a\nb\n```\n', html: '```a\nb\n```\n' })
     }
   )
 
@@ -940,7 +940,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should use a fence if there is only whitespace',
 
     async function () {
-      assert.equal(to({type: 'code', value: ' '}), '```\n \n```\n')
+      assert.deepEqual(to({type: 'code', value: ' '}), { text: '```\n \n```\n', html: '```\n \n```\n' })
     }
   )
 
@@ -948,7 +948,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should use a fence if there first line is blank (void)',
 
     async function () {
-      assert.equal(to({type: 'code', value: '\na'}), '```\n\na\n```\n')
+      assert.deepEqual(to({type: 'code', value: '\na'}), { text: '```\n\na\n```\n', html: '```\n\na\n```\n' })
     }
   )
 
@@ -956,7 +956,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should use a fence if there first line is blank (filled)',
 
     async function () {
-      assert.equal(to({type: 'code', value: ' \na'}), '```\n \na\n```\n')
+      assert.deepEqual(to({type: 'code', value: ' \na'}), { text: '```\n \na\n```\n', html: '```\n \na\n```\n' })
     }
   )
 
@@ -964,7 +964,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should use a fence if there last line is blank (void)',
 
     async function () {
-      assert.equal(to({type: 'code', value: 'a\n'}), '```\na\n\n```\n')
+      assert.deepEqual(to({type: 'code', value: 'a\n'}), { text: '```\na\n\n```\n', html: '```\na\n\n```\n' })
     }
   )
 
@@ -972,7 +972,7 @@ test('code (flow)', {skip: true}, async function (t) {
     'should use a fence if there last line is blank (filled)',
 
     async function () {
-      assert.equal(to({type: 'code', value: 'a\n '}), '```\na\n \n```\n')
+      assert.deepEqual(to({type: 'code', value: 'a\n '}), { text: '```\na\n \n```\n', html: '```\na\n \n```\n' })
     }
   )
 
@@ -980,9 +980,9 @@ test('code (flow)', {skip: true}, async function (t) {
     'should use an indent if the value is indented',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'code', value: '  a\n\n b'}, {fences: false}),
-        '      a\n\n     b\n'
+        { text: '      a\n\n     b\n', html: '      a\n\n     b\n' }
       )
     }
   )
