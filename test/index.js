@@ -696,15 +696,15 @@ test('blockquote', async function (t) {
   )
 })
 
-test('break', {skip: true}, async function (t) {
+test('break', async function (t) {
   await t.test('should support a break', async function () {
-    assert.equal(to({type: 'break'}), '\\\n')
+    assert.deepEqual(to({type: 'break'}), { text: '\\\n', html: '\\\n' })
   })
 
   await t.test(
     'should serialize breaks in heading (atx) as a space 1 ',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 3,
@@ -714,7 +714,7 @@ test('break', {skip: true}, async function (t) {
             {type: 'text', value: 'b'}
           ]
         }),
-        '**a b**\n'
+        { text: '**a b**\n', html: '**a b**\n' }
       )
     }
   )
@@ -722,7 +722,7 @@ test('break', {skip: true}, async function (t) {
   await t.test(
     'should serialize breaks in heading (atx) as a space 2',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 3,
@@ -732,7 +732,7 @@ test('break', {skip: true}, async function (t) {
             {type: 'text', value: 'b'}
           ]
         }),
-        '**a  b**\n'
+        { text: '**a  b**\n', html: '**a  b**\n' }
       )
     }
   )
@@ -740,7 +740,7 @@ test('break', {skip: true}, async function (t) {
   await t.test(
     'should serialize breaks in heading (setext)',
     async function () {
-      assert.equal(to(from('a  \nb\n=\n'), {setext: true}), '**a b**\n')
+      assert.deepEqual(to(from('a  \nb\n=\n'), {setext: true}), { text: '**a b**\n', html: '**a b**\n' })
     }
   )
 })
