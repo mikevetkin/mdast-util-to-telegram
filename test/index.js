@@ -1280,15 +1280,15 @@ test('emphasis', async function (t) {
   )
 })
 
-test('heading', {skip: true}, async function (t) {
+test('heading', async function (t) {
   await t.test(
     'should serialize a heading w/o rank as a heading of rank 1',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `children` missing.
         to({type: 'heading'}),
-        '****\n'
+        { text: '****\n', html: '****\n' }
       )
     }
   )
@@ -1297,10 +1297,10 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ rank 1',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `children` missing.
         to({type: 'heading', depth: 1}),
-        '****\n'
+        { text: '****\n', html: '****\n' }
       )
     }
   )
@@ -1309,7 +1309,7 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ rank 6',
 
     async function () {
-      assert.equal(to({type: 'heading', depth: 6, children: []}), '****\n')
+      assert.deepEqual(to({type: 'heading', depth: 6, children: []}), { text: '****\n', html: '****\n' })
     }
   )
 
@@ -1317,14 +1317,14 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ rank 7 as 6',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           // @ts-expect-error: check how the runtime handles `depth` being too high.
           depth: 7,
           children: []
         }),
-        '****\n'
+        { text: '****\n', html: '****\n' }
       )
     }
   )
@@ -1333,14 +1333,14 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ rank 0 as 1',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           // @ts-expect-error: check how the runtime handles `depth` being too low.
           depth: 0,
           children: []
         }),
-        '****\n'
+        { text: '****\n', html: '****\n' }
       )
     }
   )
@@ -1349,9 +1349,9 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ content',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]}),
-        '**a**\n'
+        { text: '**a**\n', html: '**a**\n' }
       )
     }
   )
@@ -1360,12 +1360,12 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ rank 1 as setext when `setext: true`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '**a**\n'
+        { text: '**a**\n', html: '**a**\n' }
       )
     }
   )
@@ -1374,12 +1374,12 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ rank 2 as setext when `setext: true`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {type: 'heading', depth: 2, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '**a**\n'
+        { text: '**a**\n', html: '**a**\n' }
       )
     }
   )
@@ -1388,50 +1388,12 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading w/ rank 3 as atx when `setext: true`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
           {setext: true}
         ),
-        '**a**\n'
-      )
-    }
-  )
-
-  // INFO: This test case doesn't support into obsidian
-  await t.test(
-    'SKIP should serialize a setext underline as long as the last line (1)',
-
-    async function () {
-      assert.equal(
-        to(
-          {
-            type: 'heading',
-            depth: 2,
-            children: [{type: 'text', value: 'aa\rb'}]
-          },
-          {setext: true}
-        ),
-        '**aa\rb**\n'
-      )
-    }
-  )
-
-  // INFO: This test case doesn't support into obsidian
-  await t.test(
-    'SKIP should serialize a setext underline as long as the last line (2)',
-
-    async function () {
-      assert.equal(
-        to(
-          {
-            type: 'heading',
-            depth: 1,
-            children: [{type: 'text', value: 'a\r\nbbb'}]
-          },
-          {setext: true}
-        ),
-        `**a\r\nbbb**\n`
+        { text: '**a**\n', html: '**a**\n' }
       )
     }
   )
@@ -1440,9 +1402,9 @@ test('heading', {skip: true}, async function (t) {
     'should serialize an empty heading w/ rank 1 as atx when `setext: true`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'heading', depth: 1, children: []}, {setext: true}),
-        '****\n'
+        { text: '****\n', html: '****\n' }
       )
     }
   )
@@ -1451,9 +1413,9 @@ test('heading', {skip: true}, async function (t) {
     'should serialize an empty heading w/ rank 2 as atx when `setext: true`',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'heading', depth: 2, children: []}, {setext: true}),
-        '****\n'
+        { text: '****\n', html: '****\n' }
       )
     }
   )
@@ -1462,13 +1424,13 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should serialize an heading w/ rank 1 and code w/ a line ending as setext',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'inlineCode', value: '\n'}]
         }),
-        '**`\n`**\n'
+        { text: '**`\n`**\n', html: '**`\n`**\n' }
       )
     }
   )
@@ -1477,13 +1439,13 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should serialize an heading w/ rank 1 and html w/ a line ending as setext',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'html', value: '<a\n/>'}]
         }),
-        '**<a\n/>**\n'
+        { text: '**<a\n/>**\n', html: '**<a\n/>**\n' }
       )
     }
   )
@@ -1492,13 +1454,13 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should serialize an heading w/ rank 1 and text w/ a line ending as setext',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: 'a\nb'}]
         }),
-        '**a\nb**\n'
+        { text: '**a\nb**\n', html: '**a\nb**\n' }
       )
     }
   )
@@ -1507,7 +1469,7 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should serialize an heading w/ rank 1 and a break as setext',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
@@ -1517,7 +1479,7 @@ test('heading', {skip: true}, async function (t) {
             {type: 'text', value: 'b'}
           ]
         }),
-        '**a b**\n'
+        { text: '**a b**\n', html: '**a b**\n' }
       )
     }
   )
@@ -1526,9 +1488,9 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a heading with a closing sequence when `closeAtx` (empty)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'heading', depth: 1, children: []}, {closeAtx: true}),
-        '****\n'
+        { text: '****\n', html: '****\n' }
       )
     }
   )
@@ -1537,12 +1499,12 @@ test('heading', {skip: true}, async function (t) {
     'should serialize a with a closing sequence when `closeAtx` (content)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {type: 'heading', depth: 3, children: [{type: 'text', value: 'a'}]},
           {closeAtx: true}
         ),
-        '**a**\n'
+        { text: '**a**\n', html: '**a**\n' }
       )
     }
   )
@@ -1551,13 +1513,13 @@ test('heading', {skip: true}, async function (t) {
     'should not escape a `#` at the start of phrasing in a heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 2,
           children: [{type: 'text', value: '# a'}]
         }),
-        '**# a**\n'
+        { text: '**# a**\n', html: '**# a**\n' }
       )
     }
   )
@@ -1566,13 +1528,13 @@ test('heading', {skip: true}, async function (t) {
     'should not escape a `1)` at the start of phrasing in a heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 2,
           children: [{type: 'text', value: '1) a'}]
         }),
-        '**1) a**\n'
+        { text: '**1) a**\n', html: '**1) a**\n' }
       )
     }
   )
@@ -1581,13 +1543,13 @@ test('heading', {skip: true}, async function (t) {
     'should not escape a `+` at the start of phrasing in a heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 2,
           children: [{type: 'text', value: '+ a'}]
         }),
-        '**+ a**\n'
+        { text: '**+ a**\n', html: '**+ a**\n' }
       )
     }
   )
@@ -1596,13 +1558,13 @@ test('heading', {skip: true}, async function (t) {
     'should not escape a `-` at the start of phrasing in a heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 2,
           children: [{type: 'text', value: '- a'}]
         }),
-        '**- a**\n'
+        { text: '**- a**\n', html: '**- a**\n' }
       )
     }
   )
@@ -1611,13 +1573,13 @@ test('heading', {skip: true}, async function (t) {
     'should not escape a `=` at the start of phrasing in a heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 2,
           children: [{type: 'text', value: '= a'}]
         }),
-        '**= a**\n'
+        { text: '**= a**\n', html: '**= a**\n' }
       )
     }
   )
@@ -1626,13 +1588,13 @@ test('heading', {skip: true}, async function (t) {
     'should not escape a `>` at the start of phrasing in a heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 2,
           children: [{type: 'text', value: '> a'}]
         }),
-        '**> a**\n'
+        { text: '**> a**\n', html: '**> a**\n' }
       )
     }
   )
@@ -1641,13 +1603,13 @@ test('heading', {skip: true}, async function (t) {
     'should escape a `#` at the end of a heading (1)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: 'a #'}]
         }),
-        '**a #**\n'
+        { text: '**a #**\n', html: '**a #**\n' }
       )
     }
   )
@@ -1656,13 +1618,13 @@ test('heading', {skip: true}, async function (t) {
     'should escape a `#` at the end of a heading (2)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: 'a ##'}]
         }),
-        '**a ##**\n'
+        { text: '**a ##**\n', html: '**a ##**\n' }
       )
     }
   )
@@ -1671,13 +1633,13 @@ test('heading', {skip: true}, async function (t) {
     'should not escape a `#` in a heading (2)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: 'a # b'}]
         }),
-        '**a # b**\n'
+        { text: '**a # b**\n', html: '**a # b**\n' }
       )
     }
   )
@@ -1686,13 +1648,13 @@ test('heading', {skip: true}, async function (t) {
     'should encode a space at the start of an atx heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: '  a'}]
         }),
-        '**&#x20; a**\n'
+        { text: '**&#x20; a**\n', html: '**&#x20; a**\n' }
       )
     }
   )
@@ -1701,13 +1663,13 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should encode a tab at the start of an atx heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: '\t\ta'}]
         }),
-        '**&#x9;\ta**\n'
+        { text: '**&#x9;\ta**\n', html: '**&#x9;\ta**\n' }
       )
     }
   )
@@ -1716,13 +1678,13 @@ test('heading', {skip: true}, async function (t) {
     'should encode a space at the end of an atx heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: 'a  '}]
         }),
-        '**a  **\n'
+        { text: '**a  **\n', html: '**a  **\n' }
       )
     }
   )
@@ -1731,13 +1693,13 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should encode a tab at the end of an atx heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: 'a\t\t'}]
         }),
-        '**a\t\t**\n'
+        { text: '**a\t\t**\n', html: '**a\t\t**\n' }
       )
     }
   )
@@ -1746,13 +1708,13 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should encode spaces around a line ending in a setext heading',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 1,
           children: [{type: 'text', value: 'a \n b'}]
         }),
-        '**a \n b**\n'
+        { text: '**a \n b**\n', html: '**a \n b**\n' }
       )
     }
   )
@@ -1761,13 +1723,13 @@ test('heading', {skip: true}, async function (t) {
     'SKIP should not need to encode spaces around a line ending in an atx heading (because the line ending is encoded)',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'heading',
           depth: 3,
           children: [{type: 'text', value: 'a \n b'}]
         }),
-        '**a \n b**\n'
+        { text: '**a \n b**\n', html: '**a \n b**\n' }
       )
     }
   )
