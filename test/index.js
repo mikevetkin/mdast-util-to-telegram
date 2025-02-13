@@ -988,6 +988,9 @@ test('code (flow)', async function (t) {
   )
 })
 
+/**
+ * Useless in tg cases
+ */
 test('definition', {skip: true}, async function (t) {
   await t.test('should support a definition w/o label', async function () {
     assert.equal(
@@ -1237,12 +1240,12 @@ test('definition', {skip: true}, async function (t) {
   )
 })
 
-test('emphasis', {skip: true}, async function (t) {
+test('emphasis', async function (t) {
   await t.test('should support an empty emphasis', async function () {
-    assert.equal(
+    assert.deepEqual(
       // @ts-expect-error: check how the runtime handles `children` missing.
       to({type: 'emphasis'}),
-      '**\n'
+      { text: '**\n', html: '**\n' }
     )
   })
 
@@ -1257,21 +1260,21 @@ test('emphasis', {skip: true}, async function (t) {
   )
 
   await t.test('should support an emphasis w/ children', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'emphasis', children: [{type: 'text', value: 'a'}]}),
-      '*a*\n'
+      { text: '*a*\n', html: '*a*\n' }
     )
   })
 
   await t.test(
     'should support an emphasis w/ underscores when `emphasis: "_"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {type: 'emphasis', children: [{type: 'text', value: 'a'}]},
           {emphasis: '_'}
         ),
-        '_a_\n'
+        { text: '_a_\n', html: '_a_\n' }
       )
     }
   )
