@@ -989,9 +989,9 @@ test('code (flow)', async function (t) {
 })
 
 /**
- * Useless in tg cases
+ * NOTE: Useless in tg cases
  */
-test('definition', {skip: true}, async function (t) {
+test('SKIP: definition', {skip: true}, async function (t) {
   await t.test('should support a definition w/o label', async function () {
     assert.equal(
       // @ts-expect-error: check how the runtime handles `identifier`, `url` missing.
