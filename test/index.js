@@ -2224,51 +2224,51 @@ test('code (text)', async function (t) {
   })
 })
 
-test('link', {skip: true}, async function (t) {
+test('link', async function (t) {
   await t.test('should support a link', async function () {
     // @ts-expect-error: check how the runtime handles `children`, `url` missing.
-    assert.equal(to({type: 'link'}), '[]()\n')
+    assert.deepEqual(to({type: 'link'}), { text: '[]()\n', html: '[]()\n' })
   })
 
   await t.test('should support children', async function () {
-    assert.equal(
+    assert.deepEqual(
       // @ts-expect-error: check how the runtime handles `url` missing.
       to({type: 'link', children: [{type: 'text', value: 'a'}]}),
-      '[a]()\n'
+      { text: 'a\n', html: 'a\n' }
     )
   })
 
   await t.test('should support a url', async function () {
-    assert.equal(to({type: 'link', url: 'a', children: []}), '[](a)\n')
+    assert.deepEqual(to({type: 'link', url: 'a', children: []}), { text: '[](a)\n', html: '[](a)\n' })
   })
 
   await t.test('should support a title', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'link', url: '', title: 'a', children: []}),
-      '[](<> "a")\n'
+      { text: '[](<> "a")\n', html: '[](<> "a")\n' }
     )
   })
 
   await t.test('should support a url and title', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'link', url: 'a', title: 'b', children: []}),
-      '[](a "b")\n'
+      { text: '[](a "b")\n', html: '[](a "b")\n' }
     )
   })
 
   await t.test(
-    'should support a link w/ enclosed url w/ whitespace in url',
+    'd',
     async function () {
-      assert.equal(to({type: 'link', url: 'b c', children: []}), '[](<b c>)\n')
+      assert.deepEqual(to({type: 'link', url: 'b c', children: []}), { text: '[](<b c>)\n', html: '[](<b c>)\n' })
     }
   )
 
   await t.test(
     'should escape an opening angle bracket in `url` in an enclosed url',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: 'b <c', children: []}),
-        '[](<b <c>)\n'
+        { text: '[](<b <c>)\n', html: '[](<b <c>)\n' }
       )
     }
   )
@@ -2276,9 +2276,9 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should escape a closing angle bracket in `url` in an enclosed url',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: 'b >c', children: []}),
-        '[](<b >c>)\n'
+        { text: '[](<b >c>)\n', html: '[](<b >c>)\n' }
       )
     }
   )
@@ -2286,9 +2286,9 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should escape a backslash in `url` in an enclosed url',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: 'b \\+c', children: []}),
-        '[](<b \\\\+c>)\n'
+        { text: '[](<b \\\\+c>)\n', html: '[](<b \\\\+c>)\n' }
       )
     }
   )
@@ -2296,9 +2296,9 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should encode a line ending in `url` in an enclosed url 2',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: 'b\nc', children: []}),
-        '[](<b\nc>)\n'
+        { text: '[](<b\nc>)\n', html: '[](<b\nc>)\n' }
       )
     }
   )
@@ -2306,55 +2306,55 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should escape an opening paren in `url` in a raw url',
     async function () {
-      assert.equal(to({type: 'link', url: 'b(c', children: []}), '[](b(c)\n')
+      assert.deepEqual(to({type: 'link', url: 'b(c', children: []}), { text: '[](b(c)\n', html: '[](b(c)\n' })
     }
   )
 
   await t.test(
     'should escape a closing paren in `url` in a raw url',
     async function () {
-      assert.equal(to({type: 'link', url: 'b)c', children: []}), '[](b)c)\n')
+      assert.deepEqual(to({type: 'link', url: 'b)c', children: []}), { text: '[](b)c)\n', html: '[](b)c)\n' })
     }
   )
 
   await t.test(
     'should escape a backslash in `url` in a raw url',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: 'b\\.c', children: []}),
-        '[](b\\\\.c)\n'
+        { text: '[](b\\\\.c)\n', html: '[](b\\\\.c)\n' }
       )
     }
   )
 
   await t.test('should support control characters in links', async function () {
-    assert.equal(to({type: 'link', url: '\f', children: []}), '[](<\f>)\n')
+    assert.deepEqual(to({type: 'link', url: '\f', children: []}), { text: '[](<\f>)\n', html: '[](<\f>)\n' })
   })
 
   await t.test('should escape a double quote in `title`', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'link', url: '', title: 'b"c', children: []}),
-      '[](<> "b"c")\n'
+      { text: '[](<> "b"c")\n', html: '[](<> "b"c")\n' }
     )
   })
 
   await t.test('should escape a backslash in `title`', async function () {
-    assert.equal(
+    assert.deepEqual(
       to({type: 'link', url: '', title: 'b\\-c', children: []}),
-      '[](<> "b\\\\-c")\n'
+      { text: '[](<> "b\\\\-c")\n', html: '[](<> "b\\\\-c")\n' }
     )
   })
 
   await t.test(
     'should use an autolink for nodes w/ a value similar to the url and a protocol',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'link',
           url: 'tel:123',
           children: [{type: 'text', value: 'tel:123'}]
         }),
-        '<tel:123>\n'
+        { text: '<tel:123>\n', html: '<tel:123>\n' }
       )
     }
   )
@@ -2362,7 +2362,7 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should use a resource link (`resourceLink: true`)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'link',
@@ -2371,7 +2371,7 @@ test('link', {skip: true}, async function (t) {
           },
           {resourceLink: true}
         ),
-        '[tel:123](tel:123)\n'
+        { text: '[tel:123](tel:123)\n', html: '[tel:123](tel:123)\n' }
       )
     }
   )
@@ -2379,13 +2379,13 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should use a normal link for nodes w/ a value similar to the url w/o a protocol',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'link',
           url: 'a',
           children: [{type: 'text', value: 'a'}]
         }),
-        '[a](a)\n'
+        { text: '[a](a)\n', html: '[a](a)\n' }
       )
     }
   )
@@ -2393,13 +2393,13 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should use an autolink for nodes w/ a value similar to the url and a protocol',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'link',
           url: 'tel:123',
           children: [{type: 'text', value: 'tel:123'}]
         }),
-        '<tel:123>\n'
+        { text: '<tel:123>\n', html: '<tel:123>\n' }
       )
     }
   )
@@ -2407,14 +2407,14 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should use a normal link for nodes w/ a value similar to the url w/ a title',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'link',
           url: 'tel:123',
           title: 'a',
           children: [{type: 'text', value: 'tel:123'}]
         }),
-        '[tel:123](tel:123 "a")\n'
+        { text: '[tel:123](tel:123 "a")\n', html: '[tel:123](tel:123 "a")\n' }
       )
     }
   )
@@ -2422,13 +2422,13 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should use an autolink for nodes w/ a value similar to the url and a protocol (email)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'link',
           url: 'mailto:a@b.c',
           children: [{type: 'text', value: 'a@b.c'}]
         }),
-        '<a@b.c>\n'
+        { text: '<a@b.c>\n', html: '<a@b.c>\n' }
       )
     }
   )
@@ -2445,16 +2445,16 @@ test('link', {skip: true}, async function (t) {
           }
         ]
       }),
-      '<a.b-c_d@a.b>\n'
+      { text: '<a.b-c_d@a.b>\n', html: '<a.b-c_d@a.b>\n' }
     )
   })
 
   await t.test(
     'should support a link w/ title when `quote: "\'"`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: '', title: 'b', children: []}, {quote: "'"}),
-        "[](<> 'b')\n"
+        { text: "[](<> 'b')\n", html: "[](<> 'b')\n" }
       )
     }
   )
@@ -2462,9 +2462,9 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should escape a quote in `title` in a title when `quote: "\'"` 2',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: '', title: "'", children: []}, {quote: "'"}),
-        "[](<> ''')\n"
+        { text: "[](<> ''')\n", html: "[](<> ''')\n" }
       )
     }
   )
@@ -2472,9 +2472,9 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should not escape unneeded characters in a `destinationLiteral`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: 'a b![c](d*e_f[g_h`i', children: []}),
-        '[](<a b![c](d*e_f[g_h`i>)\n'
+        { text: '[](<a b![c](d*e_f[g_h`i>)\n', html: '[](<a b![c](d*e_f[g_h`i>)\n' }
       )
     }
   )
@@ -2482,9 +2482,9 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should not escape unneeded characters in a `destinationRaw`',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({type: 'link', url: 'a![b](c*d_e[f_g`h<i</j', children: []}),
-        '[](a![b](c*d_e[f_g`h<i</j)\n'
+        { text: '[](a![b](c*d_e[f_g`h<i</j)\n', html: '[](a![b](c*d_e[f_g`h<i</j)\n' }
       )
     }
   )
@@ -2492,14 +2492,14 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should not escape unneeded characters in a `title` (double quotes)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to({
           type: 'link',
           url: '#',
           title: 'a![b](c*d_e[f_g`h<i</j',
           children: []
         }),
-        '[](# "a![b](c*d_e[f_g`h<i</j")\n'
+        { text: '[](# "a![b](c*d_e[f_g`h<i</j")\n', html: '[](# "a![b](c*d_e[f_g`h<i</j")\n' }
       )
     }
   )
@@ -2507,7 +2507,7 @@ test('link', {skip: true}, async function (t) {
   await t.test(
     'should not escape unneeded characters in a `title` (single quotes)',
     async function () {
-      assert.equal(
+      assert.deepEqual(
         to(
           {
             type: 'link',
@@ -2517,7 +2517,7 @@ test('link', {skip: true}, async function (t) {
           },
           {quote: "'"}
         ),
-        "[](# 'a![b](c*d_e[f_g`h<i</j')\n"
+        { text: "[](# 'a![b](c*d_e[f_g`h<i</j')\n", html: "[](# 'a![b](c*d_e[f_g`h<i</j')\n" }
       )
     }
   )
