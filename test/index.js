@@ -907,7 +907,7 @@ test('code (flow)', async function (t) {
   )
 
   await t.test(
-    'NEED DISCUSSION - should use more grave accents for fences if there are streaks of grave accents in the value (fences)',
+    'should use more grave accents for fences if there are streaks of grave accents in the value (fences)',
 
     async function () {
       assert.deepEqual(
@@ -918,7 +918,7 @@ test('code (flow)', async function (t) {
   )
 
   await t.test(
-    'NEED DISCUSSION - should use more tildes for fences if there are streaks of tildes in the value (fences)',
+    'should use more tildes for fences if there are streaks of tildes in the value (fences)',
 
     async function () {
       assert.deepEqual(
@@ -1421,7 +1421,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should serialize an heading w/ rank 1 and code w/ a line ending as setext',
+    'should serialize an heading w/ rank 1 and code w/ a line ending as setext',
 
     async function () {
       assert.deepEqual(
@@ -1436,7 +1436,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should serialize an heading w/ rank 1 and html w/ a line ending as setext',
+    'should serialize an heading w/ rank 1 and html w/ a line ending as setext',
 
     async function () {
       assert.deepEqual(
@@ -1451,7 +1451,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should serialize an heading w/ rank 1 and text w/ a line ending as setext',
+    'should serialize an heading w/ rank 1 and text w/ a line ending as setext',
 
     async function () {
       assert.deepEqual(
@@ -1466,7 +1466,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should serialize an heading w/ rank 1 and a break as setext',
+    'should serialize an heading w/ rank 1 and a break as setext',
 
     async function () {
       assert.deepEqual(
@@ -1660,7 +1660,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should encode a tab at the start of an atx heading',
+    'should encode a tab at the start of an atx heading',
 
     async function () {
       assert.deepEqual(
@@ -1690,7 +1690,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should encode a tab at the end of an atx heading',
+    'should encode a tab at the end of an atx heading',
 
     async function () {
       assert.deepEqual(
@@ -1705,7 +1705,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should encode spaces around a line ending in a setext heading',
+    'should encode spaces around a line ending in a setext heading',
 
     async function () {
       assert.deepEqual(
@@ -1720,7 +1720,7 @@ test('heading', async function (t) {
   )
 
   await t.test(
-    'SKIP should not need to encode spaces around a line ending in an atx heading (because the line ending is encoded)',
+    'should not need to encode spaces around a line ending in an atx heading (because the line ending is encoded)',
 
     async function () {
       assert.deepEqual(
@@ -1738,7 +1738,7 @@ test('heading', async function (t) {
 /**
  * NOTE: At the moment we not support html from markdown
  */
-test('html', {skip: true}, async function (t) {
+test('SKIP: html', {skip: true}, async function (t) {
   await t.test('should support a void html', async function () {
     // @ts-expect-error: check how the runtime handles `value` missing
     assert.equal(to({type: 'html'}), '')
@@ -1817,7 +1817,7 @@ test('html', {skip: true}, async function (t) {
 /**
  * NOTE: Work in progress
  */
-test('image', {skip: true}, async function (t) {
+test('SKIP: image', {skip: true}, async function (t) {
   await t.test('should support an image', async function () {
     // @ts-expect-error: check how the runtime handles `alt`, `url` missing.
     assert.equal(to({type: 'image'}), '![]()\n')
@@ -1948,7 +1948,10 @@ test('image', {skip: true}, async function (t) {
   )
 })
 
-test('imageReference', {skip: true}, async function (t) {
+/**
+ * NOTE: Work in progress
+ */
+test('SKIP: imageReference', {skip: true}, async function (t) {
   await t.test(
     'should support a link reference (nonsensical)',
     async function () {
