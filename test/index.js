@@ -1735,6 +1735,9 @@ test('heading', async function (t) {
   )
 })
 
+/**
+ * NOTE: At the moment we not support html from markdown
+ */
 test('html', {skip: true}, async function (t) {
   await t.test('should support a void html', async function () {
     // @ts-expect-error: check how the runtime handles `value` missing
@@ -1811,6 +1814,9 @@ test('html', {skip: true}, async function (t) {
   })
 })
 
+/**
+ * NOTE: Work in progress
+ */
 test('image', {skip: true}, async function (t) {
   await t.test('should support an image', async function () {
     // @ts-expect-error: check how the runtime handles `alt`, `url` missing.
@@ -2106,112 +2112,112 @@ test('imageReference', {skip: true}, async function (t) {
   )
 })
 
-test('code (text)', {skip: true}, async function (t) {
+test('code (text)', async function (t) {
   await t.test(
     'should support an empty code text',
 
     async function () {
-      assert.equal(
+      assert.deepEqual(
         // @ts-expect-error: check how the runtime handles `value` missing.
         to({type: 'inlineCode'}),
-        '``\n'
+        { text: '``\n', html: '``\n' }
       )
     }
   )
 
   await t.test('should support a code text', async function () {
-    assert.equal(to({type: 'inlineCode', value: 'a'}), '`a`\n')
+    assert.deepEqual(to({type: 'inlineCode', value: 'a'}), { text: '`a`\n', html: '`a`\n' })
   })
 
   await t.test('should support a space', async function () {
-    assert.equal(to({type: 'inlineCode', value: ' '}), '` `\n')
+    assert.deepEqual(to({type: 'inlineCode', value: ' '}), { text: '` `\n', html: '` `\n' })
   })
 
   await t.test('should support an eol', async function () {
-    assert.equal(to({type: 'inlineCode', value: '\n'}), '`\n`\n')
+    assert.deepEqual(to({type: 'inlineCode', value: '\n'}), { text: '`\n`\n', html: '`\n`\n' })
   })
 
   await t.test('should support several spaces', async function () {
-    assert.equal(to({type: 'inlineCode', value: '  '}), '`  `\n')
+    assert.deepEqual(to({type: 'inlineCode', value: '  '}), { text: '`  `\n', html: '`  `\n' })
   })
 
   await t.test(
     'should use a fence of two grave accents if the value contains one',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: 'a`b'}), '``a`b``\n')
+      assert.deepEqual(to({type: 'inlineCode', value: 'a`b'}), { text: '``a`b``\n', html: '``a`b``\n' })
     }
   )
 
   await t.test(
     'should use a fence of one grave accent if the value contains two',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: 'a``b'}), '`a``b`\n')
+      assert.deepEqual(to({type: 'inlineCode', value: 'a``b'}), { text: '`a``b`\n', html: '`a``b`\n' })
     }
   )
 
   await t.test(
     'should use a fence of three grave accents if the value contains two and one',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: 'a``b`c'}), '```a``b`c```\n')
+      assert.deepEqual(to({type: 'inlineCode', value: 'a``b`c'}), { text: '```a``b`c```\n', html: '```a``b`c```\n' })
     }
   )
 
   await t.test(
     'should pad w/ a space if the value starts w/ a grave accent',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: '`a'}), '`` `a ``\n')
+      assert.deepEqual(to({type: 'inlineCode', value: '`a'}), { text: '`` `a ``\n', html: '`` `a ``\n' })
     }
   )
 
   await t.test(
     'should pad w/ a space if the value ends w/ a grave accent',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: 'a`'}), '`` a` ``\n')
+      assert.deepEqual(to({type: 'inlineCode', value: 'a`'}), { text: '`` a` ``\n', html: '`` a` ``\n' })
     }
   )
 
   await t.test(
     'should pad w/ a space if the value starts and ends w/ a space',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: ' a '}), '`  a  `\n')
+      assert.deepEqual(to({type: 'inlineCode', value: ' a '}), { text: '`  a  `\n', html: '`  a  `\n' })
     }
   )
 
   await t.test(
     'should not pad w/ spaces if the value ends w/ a non-space',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: ' a'}), '` a`\n')
+      assert.deepEqual(to({type: 'inlineCode', value: ' a'}), { text: '` a`\n', html: '` a`\n' })
     }
   )
 
   await t.test(
     'should not pad w/ spaces if the value starts w/ a non-space',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: 'a '}), '`a `\n')
+      assert.deepEqual(to({type: 'inlineCode', value: 'a '}), { text: '`a `\n', html: '`a `\n' })
     }
   )
 
   await t.test('should prevent breaking out of code (-)', async function () {
-    assert.equal(to({type: 'inlineCode', value: 'a\n- b'}), '`a - b`\n')
+    assert.deepEqual(to({type: 'inlineCode', value: 'a\n- b'}), { text: '`a - b`\n', html: '`a - b`\n' })
   })
 
   await t.test('should prevent breaking out of code (#)', async function () {
-    assert.equal(to({type: 'inlineCode', value: 'a\n#'}), '`a #`\n')
+    assert.deepEqual(to({type: 'inlineCode', value: 'a\n#'}), { text: '`a #`\n', html: '`a #`\n' })
   })
 
   await t.test(
     'should prevent breaking out of code (\\d\\.)',
     async function () {
-      assert.equal(to({type: 'inlineCode', value: 'a\n1. '}), '`a 1. `\n')
+      assert.deepEqual(to({type: 'inlineCode', value: 'a\n1. '}), { text: '`a 1. `\n', html: '`a 1. `\n' })
     }
   )
 
   await t.test('should prevent breaking out of code (cr)', async function () {
-    assert.equal(to({type: 'inlineCode', value: 'a\r- b'}), '`a - b`\n')
+    assert.deepEqual(to({type: 'inlineCode', value: 'a\r- b'}), { text: '`a - b`\n', html: '`a - b`\n' })
   })
 
   await t.test('should prevent breaking out of code (crlf)', async function () {
-    assert.equal(to({type: 'inlineCode', value: 'a\r\n- b'}), '`a - b`\n')
+    assert.deepEqual(to({type: 'inlineCode', value: 'a\r\n- b'}), { text: '`a - b`\n', html: '`a - b`\n' })
   })
 })
 
