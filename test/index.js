@@ -2224,10 +2224,18 @@ test('code (text)', async function (t) {
   })
 })
 
-test('link', async function (t) {
-  await t.test('should support a link', async function () {
+test('link', { only: true }, async function (t) {
+  await t.test('should support a relevant link', async function () {
+    t.runOnly(true);
+    assert.deepEqual(
+      to({type: 'link', url: 'https://vk.com/post/la2sdf3lhl32', children: [{type: 'text', value: 'link'}]}),
+      { text: 'link (https://vk.com/post/la2sdf3lhl32)', html: '<a class="text-entity-link" href="https://vk.com/post/la2sdf3lhl32" data-entity-type="MessageEntityTextUrl" dir="auto">link</a>' }
+    )
+  })
+
+  await t.test('should support a link', { only: true }, async function () {
     // @ts-expect-error: check how the runtime handles `children`, `url` missing.
-    assert.deepEqual(to({type: 'link'}), { text: '[]()\n', html: '[]()\n' })
+    assert.deepEqual(to({type: 'link'}), { text: '[]()', html: '[]()' })
   })
 
   await t.test('should support children', async function () {
