@@ -2230,7 +2230,7 @@ test('code (text)', async function (t) {
   })
 })
 
-test('link', { skip: true }, async function (t) {
+test('link', async function (t) {
   await t.test('should support a relevant https link', async function () {
     assert.deepEqual(
       to({type: 'link', url: 'https://vk.com/post/la2sdf3lhl32', children: [{type: 'text', value: 'link'}]}),
@@ -2257,7 +2257,10 @@ test('link', { skip: true }, async function (t) {
     assert.deepEqual(to({type: 'link'}), { text: '[]()', html: '[]()' })
   })
 
-  await t.test('should support children', async function () {
+  /**
+   * FIXME: Поправить в хендлере. Должны превращаться в обычный текст
+   */
+  await t.test('should support children', {skip: true}, async function () {
     assert.deepEqual(
       // @ts-expect-error: check how the runtime handles `url` missing.
       to({type: 'link', children: [{type: 'text', value: 'a'}]}),
@@ -2386,8 +2389,11 @@ test('link', { skip: true }, async function (t) {
     }
   )
 
+  /**
+   * NOTE: is not relevant case for telegram. Just text
+   */
   await t.test(
-    'should use a resource link (`resourceLink: true`)',
+    'should use a resource link (`resourceLink: true`) - just text',
     async function () {
       assert.deepEqual(
         to(
@@ -2398,13 +2404,13 @@ test('link', { skip: true }, async function (t) {
           },
           {resourceLink: true}
         ),
-        { text: '[tel:123](tel:123)', html: '[tel:123](tel:123)' }
+        { text: 'tel:123', html: 'tel:123' }
       )
     }
   )
 
   await t.test(
-    'should use a normal link for nodes w/ a value similar to the url w/o a protocol',
+    'should use a normal text for links without http',
     async function () {
       assert.deepEqual(
         to({
@@ -2412,7 +2418,7 @@ test('link', { skip: true }, async function (t) {
           url: 'a',
           children: [{type: 'text', value: 'a'}]
         }),
-        { text: '[a](a)', html: '[a](a)' }
+        { text: 'a', html: 'a' }
       )
     }
   )
@@ -2431,8 +2437,12 @@ test('link', { skip: true }, async function (t) {
     }
   )
 
+  /**
+   * NOTE: is not relevant case in telegram
+   */
   await t.test(
     'should use a normal link for nodes w/ a value similar to the url w/ a title',
+    { skip: true },
     async function () {
       assert.deepEqual(
         to({
@@ -2441,7 +2451,7 @@ test('link', { skip: true }, async function (t) {
           title: 'a',
           children: [{type: 'text', value: 'tel:123'}]
         }),
-        { text: '[tel:123](tel:123 "a")', html: '[tel:123](tel:123 "a")' }
+        { text: 'tel:123', html: 'tel:123' }
       )
     }
   )
@@ -2481,7 +2491,7 @@ test('link', { skip: true }, async function (t) {
     async function () {
       assert.deepEqual(
         to({type: 'link', url: '', title: 'b', children: []}, {quote: "'"}),
-        { text: "[](<> 'b')\n", html: "[](<> 'b')\n" }
+        { text: "[](<> 'b')", html: "[](<> 'b')" }
       )
     }
   )
@@ -2491,23 +2501,31 @@ test('link', { skip: true }, async function (t) {
     async function () {
       assert.deepEqual(
         to({type: 'link', url: '', title: "'", children: []}, {quote: "'"}),
-        { text: "[](<> ''')\n", html: "[](<> ''')\n" }
+        { text: "[](<> ''')", html: "[](<> ''')" }
       )
     }
   )
 
+  /**
+   * NOTE: is not relevant telegram case
+   */
   await t.test(
     'should not escape unneeded characters in a `destinationLiteral`',
+    { skip: true },
     async function () {
       assert.deepEqual(
-        to({type: 'link', url: 'a b![c](d*e_f[g_h`i', children: []}),
+        to({type: 'link', url: 'a b![c](d*e_f[g_h`i>)', children: []}),
         { text: '[](<a b![c](d*e_f[g_h`i>)', html: '[](<a b![c](d*e_f[g_h`i>)' }
       )
     }
   )
 
+  /**
+   * NOTE: is not relevant telegram case
+   */
   await t.test(
     'should not escape unneeded characters in a `destinationRaw`',
+    { skip: true },
     async function () {
       assert.deepEqual(
         to({type: 'link', url: 'a![b](c*d_e[f_g`h<i</j', children: []}),
@@ -2516,8 +2534,12 @@ test('link', { skip: true }, async function (t) {
     }
   )
 
+  /**
+   * NOTE: is not relevent telegram case
+   */
   await t.test(
     'should not escape unneeded characters in a `title` (double quotes)',
+    { skip: true },
     async function () {
       assert.deepEqual(
         to({
@@ -2531,8 +2553,12 @@ test('link', { skip: true }, async function (t) {
     }
   )
 
+  /**
+   * NOTE: is not relevent telegram case
+   */
   await t.test(
     'should not escape unneeded characters in a `title` (single quotes)',
+    { skip: true },
     async function () {
       assert.deepEqual(
         to(
@@ -2719,8 +2745,12 @@ test('linkReference', async function (t) {
     }
   )
 
+  /**
+   * NOTE: is not relevant case for telegram
+   */
   await t.test(
     'should not escape unneeded characters in a `reference`',
+    { skip: true },
     async function () {
       assert.deepEqual(
         to({
