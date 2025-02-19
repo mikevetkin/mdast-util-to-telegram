@@ -1,4 +1,4 @@
-export namespace handle {
+export namespace handlers {
     export { blockquote };
     export { hardBreak as break };
     export { code };
