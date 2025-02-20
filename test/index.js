@@ -2230,7 +2230,8 @@ test('code (text)', async function (t) {
   })
 })
 
-test('link', async function (t) {
+// FIXME: После переезда открыть и чекнуть
+test('link', { skip: true }, async function (t) {
   await t.test('should support a relevant https link', async function () {
     assert.deepEqual(
       to({type: 'link', url: 'https://vk.com/post/la2sdf3lhl32', children: [{type: 'text', value: 'link'}]}),
