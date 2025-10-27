@@ -21,8 +21,10 @@
     "zwitch": "^2.0.0"
   },
   "devDependencies": {
+    "@jest/globals": "^30.2.0",
     "@types/node": "^22.0.0",
     "c8": "^10.0.0",
+    "jest": "^30.2.0",
     "mdast-util-from-markdown": "^2.0.0",
     "prettier": "^3.0.0",
     "remark-cli": "^12.0.0",
@@ -76,8 +78,8 @@
     "prepack": "npm run build && npm run format",
     "build": "tsc --build --clean && tsc --build && type-coverage",
     "format": "remark . -qfo && prettier . -w --log-level warn && xo --fix",
-    "test-api": "node --conditions development test/index.js",
-    "test-coverage": "c8 --100 --reporter lcov npm run test-api",
+    "test-api": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test-coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "test": "npm run build && npm run format && npm run test-coverage"
   },
   "sideEffects": false,
